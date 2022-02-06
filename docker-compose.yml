@@ -1,0 +1,15 @@
+version: "3.3"
+
+services:
+  backend:
+    build:
+      context: ./services/backend
+      dockerfile: backend.dockerfile
+    ports:
+      - 6055:5000
+    env_file:
+      - .env
+    volumes:
+      - ./services/backend:/app
+    command: bash -c "uvicorn app.main:app --reload --host 0.0.0.0 --port 5000"
+
