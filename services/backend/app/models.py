@@ -27,7 +27,9 @@ class User(Base, BaseMixin, TimestampMixin):
     username = Column(String, index=True)
     password = Column(String, index=True)
 
-    profile = relationship("UserProfile", cascade="all,delete", back_populates="user")
+    profile = relationship(
+        "UserProfile", cascade="all,delete",
+        back_populates="user", uselist=False)
 
     def __str__(self):
         return f"<User: {self.username}>"
@@ -36,6 +38,29 @@ class User(Base, BaseMixin, TimestampMixin):
 class UserProfile(Base, BaseMixin, TimestampMixin):
     first_name = Column(String)
     last_name = Column(String)
+    theme = Column(String)
+    summary = Column(String)
+    email = Column(String)
+    phone = Column(String)
+    designation = Column(String)
     user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
 
     user = relationship("User", back_populates="profile")
+    skills = relationship(
+        "Skill", cascade="all,delete",
+        back_populates="profile", lazy="joined")
+
+
+    def __str__(self):
+        return f"<Profile: {self.first_name} {self.last_name}>"
+
+
+class Skill(Base, BaseMixin):
+    name = Column(String, index=True)
+    learning = Column(Boolean, default=False)
+    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+
+    profile = relationship("UserProfile", back_populates="skills")
+
+    def __str__(self):
+        return f"<Skill: {self.name}>"
