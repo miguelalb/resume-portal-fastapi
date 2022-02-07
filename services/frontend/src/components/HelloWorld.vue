@@ -1,12 +1,14 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    {{info }}
+    <h3>Ping: {{ pong }}</h3>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api';
+console.log(api);
+
 export default {
   name: 'HelloWorld',
   props: {
@@ -14,14 +16,14 @@ export default {
   },
   data() {
     return {
-      info: null
+      pong: null,
+      sanityCheck: null
     }
   },
   mounted() {
-    axios
-    .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-    .then((res) => {
-      this.info = res;
+    api.pingBackend()
+    .then(res => {
+      this.pong = res.data.ping;
     }).catch(err => console.log(err));
   }
 }

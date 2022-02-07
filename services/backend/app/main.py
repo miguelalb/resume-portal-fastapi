@@ -21,6 +21,6 @@ def create_application() -> FastAPI:
 
 app = create_application()
 
-@app.get("/")
+@app.get("/ping")
 def ping():
     return {"ping": "pong!"}
