@@ -1,9 +1,7 @@
-FROM python:3.9-buster
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 
 RUN mkdir app
 WORKDIR /app
-
-ENV PATH="${PATH}:/root/.local/bin"
 
 COPY ./requirements.txt .
 RUN pip install --upgrade pip
