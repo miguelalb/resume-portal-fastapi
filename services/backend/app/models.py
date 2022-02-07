@@ -22,6 +22,9 @@ class BaseMixin(object):
 class TimestampMixin(object):
     created_at = Column(String, default=datetime.now().timestamp())
 
+class CurrentMixin(object):
+    current = Column(Boolean, default=False)
+
 
 class User(Base, BaseMixin, TimestampMixin):
     username = Column(String, index=True)
@@ -50,6 +53,10 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
         back_populates="profile", lazy="joined")
     jobs = relationship("Job", cascade="all,delete",
         back_populates="profile", lazy="joined")
+    educations = relationship("Education", cascade="all,delete",
+        back_populates="profile", lazy="joined")
+    certifications = relationship("Certification", cascade="all,delete",
+        back_populates="profile", lazy="joined")
 
 
     def __str__(self):
@@ -66,13 +73,12 @@ class Skill(Base, BaseMixin):
     def __str__(self):
         return f"<Skill: {self.name}>"
 
-class Job(Base, BaseMixin):
+class Job(Base, BaseMixin, CurrentMixin):
     company = Column(String, index=True)
     designation = Column(String, index=True)
     description = Column(Text)
     startdate = Column(String)
     enddate = Column(String, nullable=True)
-    current_job = Column(Boolean, default=False)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
 
     profile = relationship("UserProfile", back_populates="jobs")
@@ -80,3 +86,30 @@ class Job(Base, BaseMixin):
     def __str__(self):
         return f"<Job: {self.company}>"
 
+
+class Education(Base, BaseMixin, CurrentMixin):
+    college = Column(String, index=True)
+    designation = Column(String)
+    description = Column(Text)
+    startdate = Column(String)
+    enddate = Column(String, nullable=True)
+    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+
+    profile = relationship("UserProfile", back_populates="educations")
+
+    def __str__(self):
+        return f"<Education: {self.college}>"
+
+class Certification(Base, BaseMixin, CurrentMixin):
+    name = Column(String, index=True)
+    issuing_organization = Column(String)
+    issue_date = Column(String)
+    expiration_date = Column(String, nullable=True)
+    credential_id = Column(String)
+    credential_url = Column(String)
+    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+
+    profile = relationship("UserProfile", back_populates="certifications")
+
+    def __str__(self):
+        return f"<Certification: {self.name}>"
