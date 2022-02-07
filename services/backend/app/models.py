@@ -46,8 +46,9 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
     user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
 
     user = relationship("User", back_populates="profile")
-    skills = relationship(
-        "Skill", cascade="all,delete",
+    skills = relationship("Skill", cascade="all,delete",
+        back_populates="profile", lazy="joined")
+    jobs = relationship("Job", cascade="all,delete",
         back_populates="profile", lazy="joined")
 
 
@@ -64,3 +65,18 @@ class Skill(Base, BaseMixin):
 
     def __str__(self):
         return f"<Skill: {self.name}>"
+
+class Job(Base, BaseMixin):
+    company = Column(String, index=True)
+    designation = Column(String, index=True)
+    description = Column(Text)
+    startdate = Column(String)
+    enddate = Column(String, nullable=True)
+    current_job = Column(Boolean, default=False)
+    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+
+    profile = relationship("UserProfile", back_populates="jobs")
+
+    def __str__(self):
+        return f"<Job: {self.company}>"
+
