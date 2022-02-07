@@ -41,6 +41,7 @@ class User(Base, BaseMixin, TimestampMixin):
 class UserProfile(Base, BaseMixin, TimestampMixin):
     first_name = Column(String)
     last_name = Column(String)
+    public_name = Column(String)
     theme = Column(String)
     summary = Column(String)
     email = Column(String)
