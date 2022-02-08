@@ -6,5 +6,5 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 @router.get("/{public_name}")
-def get_profile_by_public_name(public_name: str, db: Session = Depends(get_db)):
+async def get_profile_by_public_name(public_name: str, db: Session = Depends(get_db)):
     return "Ok - Profile by Public Name"

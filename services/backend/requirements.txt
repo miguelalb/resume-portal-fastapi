@@ -1,5 +1,7 @@
 alembic>=1.7.6
 asyncpg>=0.24.0
+passlib[bcrypt]
+python-jose[cryptography]
 python-dotenv>=0.19.2
 psycopg2-binary>=2.9.3
 SQLAlchemy>=1.4.31

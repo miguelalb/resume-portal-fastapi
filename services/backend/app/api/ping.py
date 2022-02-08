@@ -6,7 +6,7 @@ router = APIRouter()
 settings = get_settings()
 
 @router.get("/")
-def ping():
+async def ping():
     return {
         "ping": "pong!",
         "environment": settings.ENVIRONMENT
