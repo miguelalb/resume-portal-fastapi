@@ -6,10 +6,8 @@ from app.security import get_password_hash
 
 
 def get_user_by_id(db: Session, user_id: str):
-    user = db.query(models.User)\
+    return db.query(models.User)\
         .filter(models.User.id == user_id).first()
-    if user is None:
-        raise Exc.UserNotFoundException
 
 def get_user_by_username(db: Session, username: str):
     return db.query(models.User)\

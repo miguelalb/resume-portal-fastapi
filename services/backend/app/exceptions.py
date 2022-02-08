@@ -13,6 +13,11 @@ class Exc:
         status_code=status.HTTP_404_NOT_FOUND,
         detail="User Profile not found.")
     
-    InvalidCredentialsException = HTTPException(
+    InvalidUsernameOrPasswordException = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid username or password.")
+    
+    InvalidCredentialsException = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid credentials.",
+        headers={"WWW-Authenticate": "Bearer"})
