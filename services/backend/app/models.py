@@ -10,14 +10,14 @@ from app.database import Base
 
 
 class BaseMixin(object):
-    """ Shared properties and common functionality"""
+    """ Shared properties and common functionality """
+
     @declared_attr
     def __tablename__(cls):
         return cls.__name__.lower()
-    
-    id = Column(
-        UUID(as_uuid=True), primary_key=True,
-        default=uuid.uuid4, index=True)
+
+    id = Column(UUID(as_uuid=True), primary_key=True,
+                default=uuid.uuid4, index=True)
 
 class TimestampMixin(object):
     created_at = Column(String, default=datetime.now().timestamp())

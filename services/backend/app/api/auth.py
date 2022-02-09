@@ -16,4 +16,4 @@ async def login(username: str, password: str, db: Session = Depends(get_db)):
 @router.post("/register")
 async def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
     user = crud.create_user(db, user_in)
-    return user
+    return schemas.User.from_orm(user)

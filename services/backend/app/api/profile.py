@@ -21,6 +21,4 @@ async def get_profile_by_public_name(public_name: str, db: Session = Depends(get
 async def create_profile(user_profile: schemas.UserProfileCreate, token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
     user_profile_obj = crud.create_user_profile(db, user_profile, user.id)
-    print("------- The Schema Obj is: -----------")
-    print(schemas.UserProfile.from_orm(user_profile_obj))
     return schemas.UserProfile.from_orm(user_profile_obj)

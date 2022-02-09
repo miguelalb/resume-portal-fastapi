@@ -28,7 +28,7 @@ def create_user(db: Session, user_in: schemas.UserCreate):
     db.add(user_obj)
     db.commit()
     db.refresh(user_obj)
-    return schemas.User.from_orm(user_obj)
+    return user_obj
 
 
 def update_user(db: Session, user_in: schemas.UserUpdate, user_id: str):

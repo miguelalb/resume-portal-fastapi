@@ -9,6 +9,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 # Shared Properties
 class UserBase(BaseModel):
     username: str
@@ -58,6 +59,12 @@ class CertificationBase(BaseModel):
     credential_url: Optional[AnyUrl] = None
 
 
+class ORMModeMixin(BaseModel):
+    id: UUID
+
+    class Config:
+        orm_mode = True
+
 # Properties on Create
 class UserCreate(UserBase):
     password: str
@@ -92,47 +99,28 @@ class UserUpdate(UserCreate):
 
 
 # Properties in DB
-class User(UserBase):
-    id = UUID
-
-    class Config:
-        orm_mode = True
+class User(UserBase, ORMModeMixin):
+    pass
 
 
-class Skill(SkillBase):
-    id = UUID
-
-    class Config:
-        orm_mode = True
+class Skill(SkillBase, ORMModeMixin):
+    pass
 
 
-class Job(JobBase):
-    id = UUID
-
-    class Config:
-        orm_mode = True
+class Job(JobBase, ORMModeMixin):
+    pass
 
 
-class Education(EducationBase):
-    id = UUID
-
-    class Config:
-        orm_mode = True
+class Education(EducationBase, ORMModeMixin):
+    pass
 
 
-class Certification(CertificationBase):
-    id = UUID
-
-    class Config:
-        orm_mode = True
+class Certification(CertificationBase, ORMModeMixin):
+    pass
 
 
-class UserProfile(UserProfileBase):
-    id = UUID
+class UserProfile(UserProfileBase, ORMModeMixin):
     skills: Optional[List[Skill]] = []
     jobs: Optional[List[Job]] = []
     educations: Optional[List[Education]] = []
     certifications: Optional[List[Certification]] = []
-
-    class Config:
-        orm_mode = True
