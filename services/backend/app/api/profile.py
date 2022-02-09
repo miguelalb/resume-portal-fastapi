@@ -18,7 +18,17 @@ async def get_profile_by_public_name(public_name: str, db: Session = Depends(get
 
 
 @router.post("/", response_model=schemas.UserProfile)
-async def create_profile(user_profile: schemas.UserProfileCreate, token: Optional[str] = Header(None), db: Session = Depends(get_db)):
+async def create_profile(
+    user_profile: schemas.UserProfileCreate,
+    token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
     user_profile_obj = crud.create_user_profile(db, user_profile, user.id)
     return schemas.UserProfile.from_orm(user_profile_obj)
+
+@router.put("/", response_model=schemas.UserProfile)
+async def update_profile(
+    user_profile: schemas.UserProfileUpdate,
+    token: Optional[str] = Header(None), db: Session = Depends(get_db)):
+    user = decode_access_token(db, token)
+    updated_profile = update_user_profile(db, user_profile, user.id)
+    return schemas.UserProfile(updated_profile)

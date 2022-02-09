@@ -10,7 +10,17 @@ class Token(BaseModel):
     token_type: str
 
 
-# Shared Properties
+# Shared Base Properties and Mixins
+class IDOptionalMixin(BaseModel):
+    id: Optional[UUID] = None
+
+class ORMModeMixin(BaseModel):
+    id: UUID
+
+    class Config:
+        orm_mode = True
+
+
 class UserBase(BaseModel):
     username: str
 
@@ -59,12 +69,6 @@ class CertificationBase(BaseModel):
     credential_url: Optional[AnyUrl] = None
 
 
-class ORMModeMixin(BaseModel):
-    id: UUID
-
-    class Config:
-        orm_mode = True
-
 # Properties on Create
 class UserCreate(UserBase):
     password: str
@@ -96,6 +100,29 @@ class UserProfileCreate(UserProfileBase):
 # Properties on Update
 class UserUpdate(UserCreate):
     pass
+
+
+class SkillUpdate(SkillBase, IDOptionalMixin):
+    pass
+
+
+class JobUpdate(JobBase, IDOptionalMixin):
+    pass
+
+
+class EducationUpdate(EducationBase, IDOptionalMixin):
+    pass
+
+
+class CertificationUpdate(CertificationBase, IDOptionalMixin):
+    pass
+
+
+class UserProfileUpdate(UserProfileBase, IDOptionalMixin):
+    skills: Optional[List[SkillUpdate]] = []
+    jobs: Optional[List[JobUpdate]] = []
+    educations: Optional[List[EducationUpdate]] = []
+    certifications: Optional[List[CertificationUpdate]] = []
 
 
 # Properties in DB

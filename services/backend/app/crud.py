@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -46,12 +48,20 @@ def get_user_profile_by_public_name(db: Session, public_name: str):
     return db.query(models.UserProfile)\
         .filter(models.UserProfile.public_name == public_name).first()
 
+def get_user_profile_by_id(db: Session, id: str):
+    return db.query(models.UserProfile)\
+        .filter(models.UserProfile.id == id).first()
+
+
+def validate_publicname(db: Session, public_name: str):
+    user_profile_inDB = get_user_profile_by_public_name(db, public_name)
+    if user_profile_inDB is not None:
+        raise Exc.PublicNameTakenException
+
 
 def create_user_profile(
     db: Session, profile_in: schemas.UserProfileCreate, user_id: str):
-    user_profile_inDB = get_user_profile_by_public_name(db, profile_in.public_name)
-    if user_profile_inDB is not None:
-        raise Exc.PublicNameTakenException
+    validate_publicname(db, profile_in.public_name)
     
     user_profile_object = models.UserProfile(
        first_name=profile_in.first_name,
@@ -93,3 +103,66 @@ def create_user_profile(
     db.commit()
     db.refresh(user_profile_object)
     return user_profile_object
+
+def create_skill(db: Session, skill: schemas.SkillCreate, profile_id: str):
+    skill_obj = models.Skill(**skill)
+    db.add(skill_obj)
+    skill_obj.profile_id = profile_id
+    db.commit()
+
+
+def create_job(db: Session, job: schemas.JobCreate, profile_id: str):
+    job_obj = models.Job(**job)
+    db.add(job_obj)
+    job_obj.profile_id = profile_id
+    db.commit()
+
+
+def create_education(db: Session, education: schemas.EducationCreate, profile_id: str):
+    education_obj = models.Education(**education)
+    db.add(education_obj)
+    education_obj.profile_id = profile_id
+    db.commit()
+
+
+def create_certification(db: Session, certification: schemas.CertificationCreate, profile_id: str):
+    certification_obj = models.Certification(**certification)
+    db.add(certification_obj)
+    certification_obj.profile_id = profile_id
+    db.commit()
+
+
+MODEL_CREATE_MAPPING = {
+    "skill": create_skill,
+    "job": create_job,
+    "education": create_education,
+    "certification": create_certification
+}
+
+def update_each_or_create(
+    db: Session, model, incoming_objects: List, model_type: str, profile_id: str):
+    for obj_in in incoming_objects:
+        if hasattr(obj_in, "id"):
+            old_object_inDB = db.query(model).filter(
+                model.id == obj_in.id).update(**obj_in)
+        else:
+            MODEL_CREATE_MAPPING[model_type](db, obj_in, profile_id)
+
+
+def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user_id: str):
+    validate_publicname(db, profile_in.public_name)
+    profile_inDB = get_user_profile_by_id(db, profile_in.id)
+    if profile_inDB is None:
+        raise Exc.ProfileNotFoundException
+    profile_inDB.first_name = profile_in.first_name
+    profile_inDB.last_name = profile_in.last_name
+    profile_inDB.public_name = profile_in.public_name
+    profile_inDB.theme = profile_in.theme
+    profile_inDB.summary = profile_in.summary
+    profile_inDB.email = profile_in.email
+    profile_inDB.phone = profile_in.phone
+    profile_inDB.designation = profile_in.designation
+
+    db.commit()
+    db.refresh(profile_inDB)
+    return profile_inDB
