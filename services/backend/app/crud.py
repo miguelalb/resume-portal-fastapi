@@ -27,6 +27,16 @@ def create_user(db: Session, user_in: schemas.UserCreate):
     db.refresh(user_obj)
     return schemas.User.from_orm(user_obj)
 
+def update_user(db: Session, user_in: schemas.UserUpdate, user_id: str):
+    user_obj = get_user_by_id(db, user_id)
+    if user_obj is None:
+        raise Exc.UserNotFoundException
+    user_obj.username = user_in.username
+    user_obj.password = get_password_hash(user_in.password)
+    db.commit()
+    db.refresh(user_obj)
+    return user_obj
+
 def get_user_profile_by_public_name(db: Session, public_name: str):
     user_profile = db.query(models.UserProfile)\
         .filter(models.UserProfile.public_name == public_name).first()

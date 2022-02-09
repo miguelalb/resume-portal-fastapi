@@ -14,9 +14,14 @@ class UserBase(BaseModel):
     username: str
 
 
-# Properties to receive on create
+# Properties on Create
 class UserCreate(UserBase):
     password: str
+
+
+# Properties on Update
+class UserUpdate(UserCreate):
+    pass
 
 
 # Properties in DB
