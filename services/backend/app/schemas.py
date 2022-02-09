@@ -38,6 +38,7 @@ class JobBase(BaseModel):
     current: bool
     enddate: Optional[str] = None
 
+
 class EducationBase(BaseModel):
     college: str
     designation: str
@@ -92,18 +93,46 @@ class UserUpdate(UserCreate):
 
 # Properties in DB
 class User(UserBase):
-    id: UUID
+    id = UUID
+
+    class Config:
+        orm_mode = True
+
+
+class Skill(SkillBase):
+    id = UUID
+
+    class Config:
+        orm_mode = True
+
+
+class Job(JobBase):
+    id = UUID
+
+    class Config:
+        orm_mode = True
+
+
+class Education(EducationBase):
+    id = UUID
+
+    class Config:
+        orm_mode = True
+
+
+class Certification(CertificationBase):
+    id = UUID
 
     class Config:
         orm_mode = True
 
 
 class UserProfile(UserProfileBase):
-    id: UUID
-    skills: Optional[List[SkillBase]] = []
-    jobs: Optional[List[JobBase]] = []
-    educations: Optional[List[JobBase]] = []
-    certifications: Optional[List[CertificationBase]] = []
+    id = UUID
+    skills: Optional[List[Skill]] = []
+    jobs: Optional[List[Job]] = []
+    educations: Optional[List[Education]] = []
+    certifications: Optional[List[Certification]] = []
 
     class Config:
         orm_mode = True

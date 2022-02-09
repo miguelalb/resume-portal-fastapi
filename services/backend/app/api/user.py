@@ -12,6 +12,10 @@ router = APIRouter()
 @router.get("/me", response_model=schemas.User)
 async def get_user_me(token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
+    print("----- The user Object ----")
+    print(user)
+    print(user.id)
+    print(type(user.id))
     return schemas.User.from_orm(user)
 
 @router.put("/")
