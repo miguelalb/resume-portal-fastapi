@@ -106,8 +106,8 @@ class Certification(Base, BaseMixin, CurrentMixin):
     issuing_organization = Column(String)
     issue_date = Column(String)
     expiration_date = Column(String, nullable=True)
-    credential_id = Column(String)
-    credential_url = Column(String)
+    credential_id = Column(String, nullable=True)
+    credential_url = Column(String, nullable=True)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
 
     profile = relationship("UserProfile", back_populates="certifications")
