@@ -14,6 +14,9 @@ def get_user_by_username(db: Session, username: str):
         .filter(models.User.username == username).first()
 
 def create_user(db: Session, user_in: schemas.UserCreate):
+    user_inDB = get_user_by_username(db, user_in.username)
+    if user_inDB is not None:
+        raise Exc.UsernameTakenException
     password_hash = get_password_hash(user_in.password)
     user_obj = models.User(
         username=user_in.username,

@@ -21,3 +21,8 @@ class Exc:
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid credentials.",
         headers={"WWW-Authenticate": "Bearer"})
+    
+    UsernameTakenException = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Username already taken. Please choose a different one."
+    )
