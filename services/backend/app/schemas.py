@@ -62,8 +62,27 @@ class UserCreate(UserBase):
     password: str
 
 
-class UserProfileCreate(UserProfileBase):
+class SkillCreate(SkillBase):
     pass
+
+
+class JobCreate(JobBase):
+    pass
+
+
+class EducationCreate(EducationBase):
+    pass
+
+
+class CertificationCreate(CertificationBase):
+    pass
+
+
+class UserProfileCreate(UserProfileBase):
+    skills: Optional[List[SkillCreate]] = []
+    jobs: Optional[List[JobCreate]] = []
+    educations: Optional[List[EducationCreate]] = []
+    certifications: Optional[List[CertificationCreate]] = []
 
 
 # Properties on Update
@@ -74,6 +93,17 @@ class UserUpdate(UserCreate):
 # Properties in DB
 class User(UserBase):
     id: UUID
+
+    class Config:
+        orm_mode = True
+
+
+class UserProfile(UserProfileBase):
+    id: UUID
+    skills: Optional[List[SkillBase]] = []
+    jobs: Optional[List[JobBase]] = []
+    educations: Optional[List[JobBase]] = []
+    certifications: Optional[List[CertificationBase]] = []
 
     class Config:
         orm_mode = True

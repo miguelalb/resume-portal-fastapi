@@ -26,3 +26,8 @@ class Exc:
         status_code=status.HTTP_400_BAD_REQUEST,
         detail="Username already taken. Please choose a different one."
     )
+
+    PublicNameTakenException = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Public name already taken. Please choose a different one."
+    )
