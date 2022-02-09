@@ -4,7 +4,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from app import crud
+from app import crud, schemas
 from app.config import get_settings
 from app.exceptions import Exc
 

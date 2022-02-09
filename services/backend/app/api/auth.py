@@ -9,7 +9,7 @@ router = APIRouter()
 @router.post("/login")
 async def login(username: str, password: str, db: Session = Depends(get_db)):
     user = authenticate_user(db, username, password)
-    token = create_access_token({"id": user.id})
+    token = create_access_token({"id": str(user.id)})
     return schemas.Token(access_token=token, token_type="Bearer")
 
 
