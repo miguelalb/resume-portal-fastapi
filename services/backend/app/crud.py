@@ -8,6 +8,19 @@ from app.exceptions import Exc
 from app.security import get_password_hash
 
 
+def create_generic(db: Session, model, object_in, profile_id: str):
+    model_obj = model(**object_in.dict())
+    db.add(model_obj)
+    model_obj.profile_id = profile_id
+    db.commit()
+
+
+def delete_generic(db: Session, model, obj_id: str):
+    model_obj = db.query(model).filter(model.id == obj_id).first()
+    db.delete(model_obj)
+    db.commit()
+
+
 def get_user_by_id(db: Session, user_id: str):
     return db.query(models.User)\
         .filter(models.User.id == user_id).first()
@@ -42,6 +55,10 @@ def update_user(db: Session, user_in: schemas.UserUpdate, user_id: str):
     db.commit()
     db.refresh(user_obj)
     return user_obj
+
+
+def delete_user(db: Session, user_id: str):
+    delete_generic(db, models.User, user_id)
 
 
 def get_user_profile_by_public_name(db: Session, public_name: str):
@@ -104,50 +121,22 @@ def create_user_profile(
     db.refresh(user_profile_object)
     return user_profile_object
 
-def create_skill(db: Session, skill: schemas.SkillCreate, profile_id: str):
-    skill_obj = models.Skill(**skill.dict())
-    db.add(skill_obj)
-    skill_obj.profile_id = profile_id
-    db.commit()
-
-
-def create_job(db: Session, job: schemas.JobCreate, profile_id: str):
-    job_obj = models.Job(**job.dict())
-    db.add(job_obj)
-    job_obj.profile_id = profile_id
-    db.commit()
-
-
-def create_education(db: Session, education: schemas.EducationCreate, profile_id: str):
-    education_obj = models.Education(**education.dict())
-    db.add(education_obj)
-    education_obj.profile_id = profile_id
-    db.commit()
-
-
-def create_certification(db: Session, certification: schemas.CertificationCreate, profile_id: str):
-    certification_obj = models.Certification(**certification.dict())
-    db.add(certification_obj)
-    certification_obj.profile_id = profile_id
-    db.commit()
-
-
-MODEL_CREATE_MAPPING = {
-    "skill": create_skill,
-    "job": create_job,
-    "education": create_education,
-    "certification": create_certification
-}
 
 def update_each_or_create(
-    db: Session, model, incoming_objects: List, model_type: str, profile_id: str):
+    db: Session, model, incoming_objects: List, profile_id: str):
     for obj_in in incoming_objects:
-        if hasattr(obj_in, "id") and obj_in.id is not None:
-            old_object_inDB = db.query(model).filter(
-                model.id == obj_in.id).update(obj_in.dict())
-        else:
-            fn = MODEL_CREATE_MAPPING[model_type]
-            fn(db, obj_in, profile_id)
+        if not obj_in.deleted:
+            if hasattr(obj_in, "id") and obj_in.id is not None:
+                old_object_inDB = db.query(model).filter(
+                    model.id == obj_in.id).update(obj_in.dict())
+            else:
+                create_generic(db, model, obj_in, profile_id)
+
+
+def filter_out_removed(db: Session, model, incoming_objects: List):
+    for obj_in in incoming_objects:
+        if obj_in.deleted:
+            delete_generic(db, model, obj_in.id)  
 
 
 def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user_id: str):
@@ -156,6 +145,7 @@ def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user
         raise Exc.ProfileNotFoundException
     if profile_inDB.public_name != profile_in.public_name:
         validate_publicname(db, profile_in.public_name)
+    
     profile_inDB.first_name = profile_in.first_name
     profile_inDB.last_name = profile_in.last_name
     profile_inDB.public_name = profile_in.public_name
@@ -165,11 +155,23 @@ def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user
     profile_inDB.phone = profile_in.phone
     profile_inDB.designation = profile_in.designation
 
-    update_each_or_create(db, models.Skill, profile_in.skills, "skill", profile_in.id)
-    update_each_or_create(db, models.Job, profile_in.jobs, "job", profile_in.id)
-    update_each_or_create(db, models.Education, profile_in.educations, "education", profile_in.id)
-    update_each_or_create(db, models.Certification, profile_in.certifications, "certification", profile_in.id)
+    # Update, Create new and Delete removed
+    update_each_or_create(db, models.Skill, profile_in.skills, profile_in.id)
+    filter_out_removed(db, models.Skill, profile_in.skills)
+
+    update_each_or_create(db, models.Job, profile_in.jobs, profile_in.id)
+    filter_out_removed(db, models.Job, profile_in.jobs)
+    
+    update_each_or_create(db, models.Education, profile_in.educations, profile_in.id)
+    filter_out_removed(db, models.Education, profile_in.educations)
+    
+    update_each_or_create(db, models.Certification, profile_in.certifications, profile_in.id)
+    filter_out_removed(db, models.Certification, profile_in.certifications)
 
     db.commit()
     db.refresh(profile_inDB)
     return profile_inDB
+
+
+def delete_user_profile(db: Session, profile_id: str):
+    delete_generic(db, models.UserProfile, profile_id)

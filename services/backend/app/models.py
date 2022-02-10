@@ -26,6 +26,10 @@ class CurrentMixin(object):
     current = Column(Boolean, default=False)
 
 
+class DeletedMixin(object):
+    deleted = Column(Boolean, default=False, nullable=True)
+
+
 class User(Base, BaseMixin, TimestampMixin):
     username = Column(String, index=True)
     password = Column(String, index=True)
@@ -64,7 +68,7 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
         return f"<Profile: {self.first_name} {self.last_name}>"
 
 
-class Skill(Base, BaseMixin):
+class Skill(Base, BaseMixin, DeletedMixin):
     name = Column(String, index=True)
     learning = Column(Boolean, default=False)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
@@ -74,7 +78,7 @@ class Skill(Base, BaseMixin):
     def __str__(self):
         return f"<Skill: {self.name}>"
 
-class Job(Base, BaseMixin, CurrentMixin):
+class Job(Base, BaseMixin, CurrentMixin, DeletedMixin):
     company = Column(String, index=True)
     designation = Column(String, index=True)
     description = Column(Text)
@@ -88,7 +92,7 @@ class Job(Base, BaseMixin, CurrentMixin):
         return f"<Job: {self.company}>"
 
 
-class Education(Base, BaseMixin, CurrentMixin):
+class Education(Base, BaseMixin, CurrentMixin, DeletedMixin):
     college = Column(String, index=True)
     designation = Column(String)
     description = Column(Text)
@@ -101,7 +105,7 @@ class Education(Base, BaseMixin, CurrentMixin):
     def __str__(self):
         return f"<Education: {self.college}>"
 
-class Certification(Base, BaseMixin, CurrentMixin):
+class Certification(Base, BaseMixin, CurrentMixin, DeletedMixin):
     name = Column(String, index=True)
     issuing_organization = Column(String)
     issue_date = Column(String)

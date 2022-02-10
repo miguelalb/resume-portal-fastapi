@@ -21,6 +21,10 @@ class ORMModeMixin(BaseModel):
         orm_mode = True
 
 
+class DeletedMixin(BaseModel):
+    deleted: Optional[bool] = None
+
+
 class UserBase(BaseModel):
     username: str
 
@@ -102,19 +106,19 @@ class UserUpdate(UserCreate):
     pass
 
 
-class SkillUpdate(SkillBase, IDOptionalMixin):
+class SkillUpdate(SkillBase, IDOptionalMixin, DeletedMixin):
     pass
 
 
-class JobUpdate(JobBase, IDOptionalMixin):
+class JobUpdate(JobBase, IDOptionalMixin, DeletedMixin):
     pass
 
 
-class EducationUpdate(EducationBase, IDOptionalMixin):
+class EducationUpdate(EducationBase, IDOptionalMixin, DeletedMixin):
     pass
 
 
-class CertificationUpdate(CertificationBase, IDOptionalMixin):
+class CertificationUpdate(CertificationBase, IDOptionalMixin, DeletedMixin):
     pass
 
 
