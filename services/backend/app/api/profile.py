@@ -30,5 +30,5 @@ async def update_profile(
     user_profile: schemas.UserProfileUpdate,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
-    updated_profile = update_user_profile(db, user_profile, user.id)
-    return schemas.UserProfile(updated_profile)
+    updated_profile = crud.update_user_profile(db, user_profile, user.id)
+    return schemas.UserProfile.from_orm(updated_profile)

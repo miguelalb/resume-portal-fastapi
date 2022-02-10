@@ -105,28 +105,28 @@ def create_user_profile(
     return user_profile_object
 
 def create_skill(db: Session, skill: schemas.SkillCreate, profile_id: str):
-    skill_obj = models.Skill(**skill)
+    skill_obj = models.Skill(**skill.dict())
     db.add(skill_obj)
     skill_obj.profile_id = profile_id
     db.commit()
 
 
 def create_job(db: Session, job: schemas.JobCreate, profile_id: str):
-    job_obj = models.Job(**job)
+    job_obj = models.Job(**job.dict())
     db.add(job_obj)
     job_obj.profile_id = profile_id
     db.commit()
 
 
 def create_education(db: Session, education: schemas.EducationCreate, profile_id: str):
-    education_obj = models.Education(**education)
+    education_obj = models.Education(**education.dict())
     db.add(education_obj)
     education_obj.profile_id = profile_id
     db.commit()
 
 
 def create_certification(db: Session, certification: schemas.CertificationCreate, profile_id: str):
-    certification_obj = models.Certification(**certification)
+    certification_obj = models.Certification(**certification.dict())
     db.add(certification_obj)
     certification_obj.profile_id = profile_id
     db.commit()
@@ -142,18 +142,20 @@ MODEL_CREATE_MAPPING = {
 def update_each_or_create(
     db: Session, model, incoming_objects: List, model_type: str, profile_id: str):
     for obj_in in incoming_objects:
-        if hasattr(obj_in, "id"):
+        if hasattr(obj_in, "id") and obj_in.id is not None:
             old_object_inDB = db.query(model).filter(
-                model.id == obj_in.id).update(**obj_in)
+                model.id == obj_in.id).update(obj_in.dict())
         else:
-            MODEL_CREATE_MAPPING[model_type](db, obj_in, profile_id)
+            fn = MODEL_CREATE_MAPPING[model_type]
+            fn(db, obj_in, profile_id)
 
 
 def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user_id: str):
-    validate_publicname(db, profile_in.public_name)
     profile_inDB = get_user_profile_by_id(db, profile_in.id)
     if profile_inDB is None:
         raise Exc.ProfileNotFoundException
+    if profile_inDB.public_name != profile_in.public_name:
+        validate_publicname(db, profile_in.public_name)
     profile_inDB.first_name = profile_in.first_name
     profile_inDB.last_name = profile_in.last_name
     profile_inDB.public_name = profile_in.public_name
@@ -162,6 +164,11 @@ def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user
     profile_inDB.email = profile_in.email
     profile_inDB.phone = profile_in.phone
     profile_inDB.designation = profile_in.designation
+
+    update_each_or_create(db, models.Skill, profile_in.skills, "skill", profile_in.id)
+    update_each_or_create(db, models.Job, profile_in.jobs, "job", profile_in.id)
+    update_each_or_create(db, models.Education, profile_in.educations, "education", profile_in.id)
+    update_each_or_create(db, models.Certification, profile_in.certifications, "certification", profile_in.id)
 
     db.commit()
     db.refresh(profile_inDB)
