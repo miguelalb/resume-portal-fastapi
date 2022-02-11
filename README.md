@@ -1,6 +1,6 @@
 # Resume Maker Portal App
 
-The Resume Maker Portal App is an Open Source tool that helps you create a modern :fire: and professional resume! :smile:
+The Resume Maker Portal App is an Open Source tool that helps you create a modern :fire: and professional resume!
 
 - [x] Add your information once :sparkles:
 
@@ -17,27 +17,30 @@ The Resume Maker Portal App is an Open Source tool that helps you create a moder
 
 - [Node.js](https://nodejs.org/en/)
 
-## Backend Local Development
+## How to run the app:
 
-- Add a `.env` file to the root of the project as shown in `example.env`
-- Start the stack with Docker Compose:
-  `docker-compose up -d`
+1. Clone this repository:
+   `git clone https://github.com/miguelalb/resume-portal-fastapi.git`
+2. Add a `.env` file to the root of the project as shown in `example.env`
+3. Start the stack with Docker Compose:
+   `docker-compose up -d`
 
-- Use [Alembic](https://alembic.sqlalchemy.org/en/latest/tutorial.html) to create the tables and run migrations:  
-  If you made changes to the models: `docker-compose exec backend alembic revision --autogenerate -m "First migration"`  
-  Otherwise just run: `docker-compose exec backend alembic upgrade head`
+4. Use [Alembic](https://alembic.sqlalchemy.org/en/latest/tutorial.html) to create the tables and run migrations:
 
-- Run the tests using pytest:
-  `docker-compose exec backend python -m pytest`
+   - If you made changes to the models: `docker-compose exec backend alembic revision --autogenerate -m "First migration"`
+   - Otherwise just run: `docker-compose exec backend alembic upgrade head`
 
-- Now you can open your browser and interact with these URLs:
+5. Run the tests using pytest:
+   `docker-compose exec backend python -m pytest`
 
-Backend, JSON based web API based on OpenAPI: [http://localhost:6055](http://localhost:6055)
+**Now you can open your browser and interact with these URLs:**
 
-Automatic interactive documentation with Swagger UI (from the OpenAPI backend): [http://localhost:6055/docs](http://localhost:6055/docs)
+- Backend, JSON based web API based on OpenAPI: [http://localhost:6055](http://localhost:6055)
 
-Alternative automatic documentation with ReDoc (from the OpenAPI backend): [http://localhost:6055/redoc](http://localhost:6055/redoc)
+- Automatic interactive documentation with Swagger UI (from the OpenAPI backend): [http://localhost:6055/docs](http://localhost:6055/docs)
 
-PGAdmin, PostgreSQL web administration: [http://localhost:6051](http://localhost:6051)
+- Alternative automatic documentation with ReDoc (from the OpenAPI backend): [http://localhost:6055/redoc](http://localhost:6055/redoc)
 
-VueJS Frontend: [http://localhost:6056](http://localhost:6056)
+- PGAdmin, PostgreSQL web administration: [http://localhost:6051](http://localhost:6051)
+
+- VueJS Frontend: [http://localhost:6056](http://localhost:6056)
