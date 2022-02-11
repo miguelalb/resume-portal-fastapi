@@ -1,7 +1,8 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
+from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
+                        Text)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
@@ -20,7 +21,7 @@ class BaseMixin(object):
                 default=uuid.uuid4, index=True)
 
 class TimestampMixin(object):
-    created_at = Column(String, default=datetime.now().timestamp())
+    created_at = Column(DateTime, default=datetime.utcnow())
 
 class CurrentMixin(object):
     current = Column(Boolean, default=False)
@@ -33,13 +34,31 @@ class DeletedMixin(object):
 class User(Base, BaseMixin, TimestampMixin):
     username = Column(String, index=True)
     password = Column(String, index=True)
+    is_admin = Column(Boolean, default=False)
+    template_id = Column(UUID(as_uuid=True), ForeignKey('template.id'))
 
     profile = relationship(
         "UserProfile", cascade="all,delete",
         back_populates="user", uselist=False)
+    
+    template = relationship(
+        "Template", back_populates="users", lazy="joined")
 
     def __str__(self):
         return f"<User: {self.username}>"
+
+
+class Template(Base, BaseMixin, TimestampMixin):
+    name = Column(String, index=True)
+    content = Column(Text)
+    premium = Column(Boolean, default=False, index=True)
+
+    users = relationship(
+        "User", back_populates="template")
+    
+    def __str__(self):
+        return f"<Template: {self.name}>"
+    
 
 
 class UserProfile(Base, BaseMixin, TimestampMixin):
@@ -82,8 +101,8 @@ class Job(Base, BaseMixin, CurrentMixin, DeletedMixin):
     company = Column(String, index=True)
     designation = Column(String, index=True)
     description = Column(Text)
-    startdate = Column(String)
-    enddate = Column(String, nullable=True)
+    startdate = Column(DateTime)
+    enddate = Column(DateTime, nullable=True)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
 
     profile = relationship("UserProfile", back_populates="jobs")
@@ -96,8 +115,8 @@ class Education(Base, BaseMixin, CurrentMixin, DeletedMixin):
     college = Column(String, index=True)
     designation = Column(String)
     description = Column(Text)
-    startdate = Column(String)
-    enddate = Column(String, nullable=True)
+    startdate = Column(DateTime)
+    enddate = Column(DateTime, nullable=True)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
 
     profile = relationship("UserProfile", back_populates="educations")
@@ -108,8 +127,8 @@ class Education(Base, BaseMixin, CurrentMixin, DeletedMixin):
 class Certification(Base, BaseMixin, CurrentMixin, DeletedMixin):
     name = Column(String, index=True)
     issuing_organization = Column(String)
-    issue_date = Column(String)
-    expiration_date = Column(String, nullable=True)
+    issue_date = Column(DateTime)
+    expiration_date = Column(DateTime, nullable=True)
     credential_id = Column(String, nullable=True)
     credential_url = Column(String, nullable=True)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))

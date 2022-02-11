@@ -38,19 +38,19 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
+htmlcov/*
+.tox/*
+.nox/*
+.coverage*
 .coverage.*
-.cache
-nosetests.xml
-coverage.xml
+.cache*
+nosetests.xml*
+coverage.xml*
 *.cover
 *.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
+.hypothesis/*
+.pytest_cache/*
+cover/*
 
 # Translations
 *.mo
@@ -114,12 +114,12 @@ celerybeat.pid
 
 # Environments
 .env*
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+.venv*
+env/*
+venv/*
+ENV/*
+env.bak/*
+venv.bak/*
 
 # Spyder project settings
 .spyderproject

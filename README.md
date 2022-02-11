@@ -6,7 +6,7 @@ The Resume Maker Portal App is an Open Source tool that helps you create a moder
 
 - [x] Choose from our professional, elegant, creative, or modern resume templates :sparkles:
 
-- [x] Get a personalize shareable link and showcase your hard-earned skills :smirk: and experience to potencial employers and clients :sparkles:
+- [x] Get a personalize shareable link to showcase your hard-earned skills and experience :smirk: to potencial employers and clients :sparkles:
 
 ## Backend Requirements
 
