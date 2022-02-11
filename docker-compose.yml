@@ -2,15 +2,19 @@ version: "3.3"
 
 services:
   db:
-    image: postgres:13
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+    build:
+      context: ./services/db
+      dockerfile: Dockerfile
+    restart: always
     expose:
       - 5432
     env_file:
-      - .env
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
+      - ./services/db/.env
+    volumes:
+      - ./services/db:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - api
   
   pgadmin:
     image: dpage/pgadmin4
@@ -22,6 +26,8 @@ services:
       - .env
     volumes:
       - my_data:/var/lib/pgadmin
+    networks:
+      - api
   
   backend:
     build:
@@ -33,9 +39,11 @@ services:
       - .env
     volumes:
       - ./services/backend:/app
-    command: bash -c "alembic upgrade head && uvicorn app.main:app --reload --host 0.0.0.0 --port 5000"
+    command: bash -c "uvicorn app.main:app --reload --host 0.0.0.0 --port 5000"
     depends_on:
       - db
+    networks:
+      - api
   
   frontend:
     build:
@@ -54,3 +62,7 @@ services:
 volumes:
   postgres_data:
   my_data:
+
+networks:
+  api:
+    driver: bridge

@@ -1,2 +1,3 @@
 backend.dockerfile
 __pycache__*
+.dockerignore

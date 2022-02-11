@@ -1,7 +1,11 @@
 alembic>=1.7.6
 asyncpg>=0.24.0
+fastapi>=0.72.0
 passlib[bcrypt]
+pytest>=7.0.0
 python-jose[cryptography]
 python-dotenv>=0.19.2
 psycopg2-binary>=2.9.3
+requests>=2.27.1
 SQLAlchemy>=1.4.31
+uvicorn[standard]
