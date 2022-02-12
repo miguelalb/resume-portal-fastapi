@@ -2,7 +2,8 @@ import logging
 
 import pytest
 from app.config import get_settings
-from app.crud import create_user, get_user_by_username, promote_user
+from app.crud import (create_user, get_user_by_username, promote_user,
+                      upgrade_user_to_premium)
 from app.dependencies import get_db
 from app.main import create_application
 from app.models import Base
@@ -47,6 +48,7 @@ def superuser():
     if superuser is None:
         user = create_user(db, user_creds)
         promote_user(db, user.id)
+        upgrade_user_to_premium(db, user.id)
     return user_creds
 
 

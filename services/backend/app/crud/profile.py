@@ -1,91 +1,16 @@
 from typing import List
 
+from app import models, schemas
+from app.crud.crud_base import create_generic_profile_child, delete_generic
+from app.exceptions import Exc
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-
-from app import models, schemas
-from app.exceptions import Exc
-from app.security import get_password_hash
-
-
-def create_generic_profile_child(db: Session, model, object_in, profile_id: str):
-    model_obj = model(**object_in.dict())
-    db.add(model_obj)
-    model_obj.profile_id = profile_id
-    db.commit()
-
-
-def delete_generic(db: Session, model, obj_id: str):
-    model_obj = db.query(model).filter(model.id == obj_id).first()
-    if model_obj is None:
-        raise Exc.ObjectNotFoundException("Object")
-    db.delete(model_obj)
-    db.commit()
-
-
-def get_user_by_id(db: Session, user_id: str):
-    return db.query(models.User)\
-        .filter(models.User.id == user_id).first()
-
-
-def get_user_by_username(db: Session, username: str):
-    return db.query(models.User)\
-        .filter(models.User.username == username).first()
-
-
-def create_user(db: Session, user_in: schemas.UserCreate):
-    user_inDB = get_user_by_username(db, user_in.username)
-    if user_inDB is not None:
-        raise Exc.NameTakenException("Username")
-    password_hash = get_password_hash(user_in.password)
-    user_obj = models.User(
-        username=user_in.username,
-        password=password_hash
-    )
-    db.add(user_obj)
-    db.commit()
-    db.refresh(user_obj)
-    return user_obj
-
-
-def update_user(db: Session, user_in: schemas.UserUpdate, user_id: str):
-    user_obj = get_user_by_id(db, user_id)
-    if user_obj is None:
-        raise Exc.ObjectNotFoundException("User")
-    user_obj.username = user_in.username
-    user_obj.password = get_password_hash(user_in.password)
-    db.commit()
-    db.refresh(user_obj)
-    return user_obj
-
-
-def delete_user(db: Session, user_id: str):
-    delete_generic(db, models.User, user_id)
-
-
-def promote_user(db: Session, user_id: str):
-    user_obj = get_user_by_id(db, user_id)
-    if user_obj is None:
-        raise Exc.ObjectNotFoundException("User")
-    user_obj.is_admin = True
-    db.commit()
-    db.refresh(user_obj)
-    return user_obj
-
-
-def upgrade_user_to_premium(db: Session, user_id: str):
-    user_obj = get_user_by_id(db, user_id)
-    if user_obj is None:
-        raise Exc.ObjectNotFoundException("User")
-    user_obj.is_premium = True
-    db.commit()
-    db.refresh(user_obj)
-    return user_obj
 
 
 def get_user_profile_by_public_name(db: Session, public_name: str):
     return db.query(models.UserProfile)\
         .filter(models.UserProfile.public_name == public_name).first()
+
 
 def get_user_profile_by_id(db: Session, id: str):
     return db.query(models.UserProfile)\
@@ -197,57 +122,3 @@ def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user
 
 def delete_user_profile(db: Session, profile_id: str):
     delete_generic(db, models.UserProfile, profile_id)
-
-
-def get_templates(db: Session, user: models.User):
-    if user.is_premium:
-        return db.query(models.Template).all()
-    return db.query(models.Template)\
-        .filter(models.Template.premium == False).all()
-
-
-def get_template_by_id(db: Session, id: str):
-    return db.query(models.Template)\
-        .filter(models.Template.id == id).first()
-
-
-def get_template_by_id_out(db: Session, template_id: str, user: models.User):
-    if user.is_premium:
-        return db.query(models.Template)\
-            .filter(models.Template.id == template_id).first()
-    return db.query(models.Template)\
-        .filter(models.Template.premium == False)\
-        .filter(models.Template.id == template_id).first()
-
-
-def get_template_by_name(db: Session, name: str):
-    return db.query(models.Template)\
-        .filter(models.Template.name == name).first()
-
-
-def create_template(db: Session, template_in: schemas.TemplateCreate):
-    existing_template = get_template_by_name(db, template_in.name)
-    if existing_template is not None:
-        raise Exc.NameTakenException("Template name")
-    template_obj = models.Template(**template_in.dict())
-    db.add(template_obj)
-    db.commit()
-    db.refresh(template_obj)
-    return template_obj
-
-
-def update_template(db: Session, template_in: schemas.TemplateUpdate, template_id: str):
-    template_obj = get_template_by_id(db, template_id)
-    if template_obj is None:
-        raise Exc.ObjectNotFoundException("Template")
-    
-    template_obj.name = template_in.name
-    template_obj.content = template_in.content
-    template_obj.premium = template_in.premium
-    db.commit()
-    db.refresh(template_obj)
-    return template_obj
-
-
-def delete_template(db: Session, template_id: str):
-    delete_generic(db, models.Template, template_id)

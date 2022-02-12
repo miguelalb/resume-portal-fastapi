@@ -1,7 +1,7 @@
 from typing import Optional
 
 from app import crud, schemas
-from app.dependencies import get_db
+from app.dependencies import get_db, get_user
 from app.exceptions import Exc
 from app.security import decode_access_token
 from fastapi import APIRouter, Depends, Header
@@ -17,11 +17,11 @@ async def get_profile_by_public_name(public_name: str, db: Session = Depends(get
     return schemas.UserProfile.from_orm(user_profile)
 
 
-@router.post("/", response_model=schemas.UserProfile)
+@router.post("", response_model=schemas.UserProfile)
 async def create_profile(
     user_profile: schemas.UserProfileCreate,
-    token: Optional[str] = Header(None), db: Session = Depends(get_db)):
-    user = decode_access_token(db, token)
+    user = Depends(get_user), db: Session = Depends(get_db)):
+    
     user_profile_obj = crud.create_user_profile(db, user_profile, user.id)
     return schemas.UserProfile.from_orm(user_profile_obj)
 
