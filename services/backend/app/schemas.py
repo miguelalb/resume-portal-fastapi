@@ -148,12 +148,14 @@ class UserProfileUpdate(UserProfileBase, IDOptionalMixin):
 
 
 # Properties in DB
-class User(UserBase, ORMModeMixin):
-    pass
-
-
 class Template(TemplateBase, ORMModeMixin):
     pass
+
+
+class User(UserBase, ORMModeMixin):
+    is_admin: bool
+    is_premium: bool
+    template: Optional[Template] = None
 
 
 class Skill(SkillBase, ORMModeMixin):

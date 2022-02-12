@@ -56,3 +56,4 @@ def update_template(db: Session, template_in: schemas.TemplateUpdate, template_i
 
 def delete_template(db: Session, template_id: str):
     delete_generic(db, models.Template, template_id)
+

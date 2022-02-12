@@ -77,3 +77,39 @@ def test_delete_template(test_app, auth_headers):
     
     assert response.status_code == 200
     assert response.json()["message"] == "Template deleted successfully!"
+
+
+def test_update_user_template(test_app, auth_headers):
+    data = get_sample_data()
+    response = test_app.post("/template", headers=auth_headers, json=data)
+
+    assert response.status_code == 201
+    template_id = response.json()["id"]
+
+    response = test_app.put(
+        f"/users/template/{template_id}", headers=auth_headers)
+    
+    assert response.status_code == 200
+    assert response.json()["name"] == data["name"]
+    assert response.json()["content"] == data["content"]
+    assert response.json()["premium"] == data["premium"]
+
+
+def test_get_user_template(test_app, auth_headers):
+    data = get_sample_data()
+    response = test_app.post("/template", headers=auth_headers, json=data)
+
+    assert response.status_code == 201
+    template_id = response.json()["id"]
+
+    response = test_app.put(
+        f"/users/template/{template_id}", headers=auth_headers)
+    
+    assert response.status_code == 200
+    
+    response = test_app.get("/users/template", headers=auth_headers)
+
+    assert response.status_code == 200
+    assert response.json()["name"] == data["name"]
+    assert response.json()["content"] == data["content"]
+    assert response.json()["premium"] == data["premium"]
