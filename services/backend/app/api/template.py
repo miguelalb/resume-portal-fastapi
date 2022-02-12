@@ -3,22 +3,32 @@ from typing import List, Optional
 from app import crud, schemas
 from app.dependencies import get_db
 from app.security import admin_required, decode_access_token
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 
 
 @router.get("/", response_model=schemas.Template)
-def get_all_templates(
+async def get_all_templates(
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
     templates_obj = crud.get_templates(db, user)
     return schemas.Template.from_orm(templates_obj)
 
 
-@router.post("/", response_model=schemas.Template)
-def create_template(
+@router.get("/{template_id}", response_model=schemas.Template)
+async def get_template_by_id(
+    template_id: str,
+    token: Optional[str] = Header(None), db: Session = Depends(get_db)):
+    user = decode_access_token(db, token)
+    template_obj = crud.get_template_by_id_out(db, template_id, user)
+    return schemas.Template.from_orm(template_obj)
+
+
+@router.post(
+    "/", response_model=schemas.Template, status_code=status.HTTP_201_CREATED)
+async def create_template(
     template: schemas.TemplateCreate,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
@@ -28,7 +38,7 @@ def create_template(
 
 
 @router.put("/", response_model=schemas.Template)
-def update_template(
+async def update_template(
     template_id: str, template: schemas.TemplateCreate,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
@@ -38,7 +48,7 @@ def update_template(
 
 
 @router.delete("/", response_model=schemas.GenericMessage)
-def update_template(
+async def update_template(
     template_id: str,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)

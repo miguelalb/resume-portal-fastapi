@@ -211,6 +211,15 @@ def get_template_by_id(db: Session, id: str):
         .filter(models.Template.id == id).first()
 
 
+def get_template_by_id_out(db: Session, template_id: str, user: models.User):
+    if user.is_premium:
+        return db.query(models.Template)\
+            .filter(models.Template.id == template_id).first()
+    return db.query(models.Template)\
+        .filter(models.Template.premium == False)\
+        .filter(models.Template.id == template_id).first()
+
+
 def get_template_by_name(db: Session, name: str):
     return db.query(models.Template)\
         .filter(models.Template.name == name).first()
