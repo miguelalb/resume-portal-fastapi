@@ -13,7 +13,7 @@ router = APIRouter()
 async def get_profile_by_public_name(public_name: str, db: Session = Depends(get_db)):
     user_profile = crud.get_user_profile_by_public_name(db, public_name)
     if user_profile is None:
-        raise Exc.ProfileNotFoundException
+        raise Exc.ObjectNotFoundException("User Profile")
     return schemas.UserProfile.from_orm(user_profile)
 
 
@@ -35,8 +35,8 @@ async def update_profile(
     return schemas.UserProfile.from_orm(updated_profile)
 
 
-@router.delete("/")
+@router.delete("/", response_model=schemas.GenericMessage)
 async def delete_profile(profile_id: str,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     crud.delete_user_profile(db, profile_id)
-    return {"message": "Profile deleted successfully"}
+    return schemas.GenericMessage(message="Profile deleted successfully")

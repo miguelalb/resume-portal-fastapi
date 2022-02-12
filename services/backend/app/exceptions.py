@@ -5,13 +5,17 @@ class Exc:
     """
     Exceptions returned by the API to consumers.
     """
-    UserNotFoundException = HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="User not found.")
+    @staticmethod
+    def ObjectNotFoundException(obj_name: str):
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"{obj_name} not found.")
     
-    ProfileNotFoundException = HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="User Profile not found.")
+    @staticmethod
+    def NameTakenException(obj_name: str):
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"{obj_name} already exists. Please choose a different one.")
     
     InvalidUsernameOrPasswordException = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -21,13 +25,8 @@ class Exc:
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid credentials.",
         headers={"WWW-Authenticate": "Bearer"})
-    
-    UsernameTakenException = HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Username already taken. Please choose a different one."
-    )
 
-    PublicNameTakenException = HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Public name already taken. Please choose a different one."
+    AdminRequiredException = HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="You don't have enough permissions to access this resource. Please contact your administrator"
     )

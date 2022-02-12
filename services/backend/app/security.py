@@ -4,7 +4,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from app import crud, schemas
+from app import crud, models, schemas
 from app.config import get_settings
 from app.exceptions import Exc
 
@@ -49,3 +49,8 @@ def decode_access_token(db: Session, token: str) -> schemas.User:
     if user_db is None:
         raise Exc.InvalidCredentialsException
     return user_db
+
+
+def admin_required(user: models.User) -> None:
+    if not user.is_admin:
+        raise Exc.AdminRequiredException

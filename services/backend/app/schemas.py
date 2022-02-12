@@ -25,8 +25,18 @@ class DeletedMixin(BaseModel):
     deleted: Optional[bool] = None
 
 
+class GenericMessage(BaseModel):
+    message: str
+
+
 class UserBase(BaseModel):
     username: str
+
+
+class TemplateBase(BaseModel):
+    name: str
+    content: str
+    premium: bool
 
 
 class UserProfileBase(BaseModel):
@@ -78,6 +88,10 @@ class UserCreate(UserBase):
     password: str
 
 
+class TemplateCreate(TemplateBase):
+    pass
+
+
 class SkillCreate(SkillBase):
     pass
 
@@ -106,6 +120,10 @@ class UserUpdate(UserCreate):
     pass
 
 
+class TemplateUpdate(TemplateCreate, IDOptionalMixin):
+    pass
+
+
 class SkillUpdate(SkillBase, IDOptionalMixin, DeletedMixin):
     pass
 
@@ -131,6 +149,10 @@ class UserProfileUpdate(UserProfileBase, IDOptionalMixin):
 
 # Properties in DB
 class User(UserBase, ORMModeMixin):
+    pass
+
+
+class Template(TemplateBase, ORMModeMixin):
     pass
 
 

@@ -21,7 +21,7 @@ class BaseMixin(object):
                 default=uuid.uuid4, index=True)
 
 class TimestampMixin(object):
-    created_at = Column(DateTime, default=datetime.utcnow())
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class CurrentMixin(object):
     current = Column(Boolean, default=False)
@@ -35,6 +35,7 @@ class User(Base, BaseMixin, TimestampMixin):
     username = Column(String, index=True)
     password = Column(String, index=True)
     is_admin = Column(Boolean, default=False)
+    is_premium = Column(Boolean, default=False)
     template_id = Column(UUID(as_uuid=True), ForeignKey('template.id'))
 
     profile = relationship(
