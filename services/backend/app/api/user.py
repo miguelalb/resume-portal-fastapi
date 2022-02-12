@@ -14,6 +14,7 @@ async def get_user_me(token: Optional[str] = Header(None), db: Session = Depends
     user = decode_access_token(db, token)
     return schemas.User.from_orm(user)
 
+
 @router.put("/")
 async def update_user_me(user_in: schemas.UserUpdate, token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user_inDB = decode_access_token(db, token)

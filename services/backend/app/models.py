@@ -21,7 +21,7 @@ class BaseMixin(object):
                 default=uuid.uuid4, index=True)
 
 class TimestampMixin(object):
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(String, default=datetime.utcnow().timestamp())
 
 class CurrentMixin(object):
     current = Column(Boolean, default=False)
@@ -102,8 +102,8 @@ class Job(Base, BaseMixin, CurrentMixin, DeletedMixin):
     company = Column(String, index=True)
     designation = Column(String, index=True)
     description = Column(Text)
-    startdate = Column(DateTime)
-    enddate = Column(DateTime, nullable=True)
+    startdate = Column(String)
+    enddate = Column(String, nullable=True)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
 
     profile = relationship("UserProfile", back_populates="jobs")
@@ -116,8 +116,8 @@ class Education(Base, BaseMixin, CurrentMixin, DeletedMixin):
     college = Column(String, index=True)
     designation = Column(String)
     description = Column(Text)
-    startdate = Column(DateTime)
-    enddate = Column(DateTime, nullable=True)
+    startdate = Column(String)
+    enddate = Column(String, nullable=True)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
 
     profile = relationship("UserProfile", back_populates="educations")
@@ -128,8 +128,8 @@ class Education(Base, BaseMixin, CurrentMixin, DeletedMixin):
 class Certification(Base, BaseMixin, CurrentMixin, DeletedMixin):
     name = Column(String, index=True)
     issuing_organization = Column(String)
-    issue_date = Column(DateTime)
-    expiration_date = Column(DateTime, nullable=True)
+    issue_date = Column(String)
+    expiration_date = Column(String, nullable=True)
     credential_id = Column(String, nullable=True)
     credential_url = Column(String, nullable=True)
     profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
