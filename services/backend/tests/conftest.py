@@ -8,7 +8,6 @@ from app.dependencies import get_db
 from app.main import create_application
 from app.models import Base
 from app.schemas import UserCreate
-from fastapi import Depends
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

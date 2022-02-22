@@ -4,7 +4,7 @@ from app import crud, schemas
 from app.dependencies import get_db, get_user
 from app.exceptions import Exc
 from app.security import decode_access_token
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -17,7 +17,7 @@ async def get_profile_by_public_name(public_name: str, db: Session = Depends(get
     return schemas.UserProfile.from_orm(user_profile)
 
 
-@router.post("", response_model=schemas.UserProfile)
+@router.post("", response_model=schemas.UserProfile, status_code=status.HTTP_201_CREATED)
 async def create_profile(
     user_profile: schemas.UserProfileCreate,
     user = Depends(get_user), db: Session = Depends(get_db)):
@@ -26,8 +26,9 @@ async def create_profile(
     return schemas.UserProfile.from_orm(user_profile_obj)
 
 
-@router.put("/", response_model=schemas.UserProfile)
+@router.put("/{profile_id}", response_model=schemas.UserProfile)
 async def update_profile(
+    profile_id: str,
     user_profile: schemas.UserProfileUpdate,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
@@ -35,7 +36,7 @@ async def update_profile(
     return schemas.UserProfile.from_orm(updated_profile)
 
 
-@router.delete("/", response_model=schemas.GenericMessage)
+@router.delete("/{profile_id}", response_model=schemas.GenericMessage)
 async def delete_profile(profile_id: str,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     crud.delete_user_profile(db, profile_id)

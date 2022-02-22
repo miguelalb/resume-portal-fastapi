@@ -1,38 +1,11 @@
-import random
-import sys
-
-{
-  "first_name": "string",
-  "last_name": "string",
-  "public_name": "string",
-  "theme": "string",
-  "summary": "string",
-  "email": "string",
-  "phone": "string",
-  "designation": "string",
-  "skills": [],
-  "jobs": [],
-  "educations": [],
-  "certifications": []
-}
-
-def get_random_user():
-    username = "SampleUser" + str(random.randint(0,sys.maxsize))
-    password = "SamplePassword" + str(random.randint(0,sys.maxsize))
-    return {"username": username, "password": password}
-
-def get_sample_skill():
-    pass
+from .data_generator import get_sample_profile
 
 
-def get_sample_job():
-    pass
+def test_create_profile(test_app, auth_headers):
+    data = get_sample_profile()
+    response = test_app.post("/profile", headers=auth_headers, json=data)
 
-def get_sample_education():
-    pass
-
-def get_sample_certification():
-    pass
-
-def get_sample_profile():
-    pass
+    assert response.status_code == 201
+    assert response.json()["first_name"] == data["first_name"]
+    assert response.json()["public_name"] == data["public_name"]
+    assert response.json()["educations"][0]["college"] == data["educations"][0]["college"]
