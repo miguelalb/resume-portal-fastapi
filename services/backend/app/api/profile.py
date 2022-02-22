@@ -32,12 +32,13 @@ async def update_profile(
     user_profile: schemas.UserProfileUpdate,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
-    updated_profile = crud.update_user_profile(db, user_profile, user.id)
+    updated_profile = crud.update_user_profile(db, user_profile, profile_id, user.id)
     return schemas.UserProfile.from_orm(updated_profile)
 
 
 @router.delete("/{profile_id}", response_model=schemas.GenericMessage)
-async def delete_profile(profile_id: str,
+async def delete_profile(
+    profile_id: str,
     token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     crud.delete_user_profile(db, profile_id)
     return schemas.GenericMessage(message="Profile deleted successfully")

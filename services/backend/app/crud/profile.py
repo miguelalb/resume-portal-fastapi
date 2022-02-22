@@ -12,9 +12,9 @@ def get_user_profile_by_public_name(db: Session, public_name: str):
         .filter(models.UserProfile.public_name == public_name).first()
 
 
-def get_user_profile_by_id(db: Session, id: str):
+def get_user_profile_by_id(db: Session, profile_id: str):
     return db.query(models.UserProfile)\
-        .filter(models.UserProfile.id == id).first()
+        .filter(models.UserProfile.id == profile_id).first()
 
 
 def validate_publicname(db: Session, public_name: str):
@@ -86,8 +86,8 @@ def filter_out_removed(db: Session, model, incoming_objects: List):
             delete_generic(db, model, obj_in.id)  
 
 
-def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, user_id: str):
-    profile_inDB = get_user_profile_by_id(db, profile_in.id)
+def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, profile_id: str, user_id: str):
+    profile_inDB = get_user_profile_by_id(db, profile_id)
     if profile_inDB is None:
         raise Exc.ObjectNotFoundException("User Profile")
     if profile_inDB.public_name != profile_in.public_name:
