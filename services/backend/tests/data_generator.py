@@ -3,10 +3,11 @@ import sys
 from datetime import datetime
 
 
-def get_random_user():
-    username = "SampleUser" + str(random.randint(0,sys.maxsize))
-    password = "SamplePassword" + str(random.randint(0,sys.maxsize))
-    return {"username": username, "password": password}
+def get_sample_template():
+    name = "Sample" + str(random.randint(0,sys.maxsize))
+    content = "SampleContent" + str(random.randint(0,sys.maxsize))
+    premium = random.choice([True, False])
+    return {"name": name, "content": content, "premium": premium}
 
 
 def get_sample_skill():
