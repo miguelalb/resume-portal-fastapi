@@ -1,44 +1,12 @@
-from typing import Any, List, Optional, Union
+from typing import List, Optional
 from uuid import UUID
 
+from app.schemas.base import DeletedMixin, IDOptionalMixin, ORMModeMixin
+from app.schemas.template import Template
 from pydantic import AnyUrl, BaseModel
 
 
-# Security
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-# Shared Base Properties and Mixins
-class IDOptionalMixin(BaseModel):
-    id: Optional[UUID] = None
-
-class ORMModeMixin(BaseModel):
-    id: UUID
-
-    class Config:
-        orm_mode = True
-
-
-class DeletedMixin(BaseModel):
-    deleted: Optional[bool] = None
-
-
-class GenericMessage(BaseModel):
-    message: str
-
-
-class UserBase(BaseModel):
-    username: str
-
-
-class TemplateBase(BaseModel):
-    name: str
-    content: str
-    premium: bool
-
-
+# shared properties
 class UserProfileBase(BaseModel):
     first_name: str
     last_name: str
@@ -86,15 +54,7 @@ class UserProfileRender(BaseModel):
     content: str
 
 
-# Properties on Create
-class UserCreate(UserBase):
-    password: str
-
-
-class TemplateCreate(TemplateBase):
-    pass
-
-
+# properties on Create
 class SkillCreate(SkillBase):
     pass
 
@@ -119,15 +79,7 @@ class UserProfileCreate(UserProfileBase):
     template_id: UUID
 
 
-# Properties on Update
-class UserUpdate(UserCreate):
-    pass
-
-
-class TemplateUpdate(TemplateCreate, IDOptionalMixin):
-    pass
-
-
+# properties on Update
 class SkillUpdate(SkillBase, IDOptionalMixin, DeletedMixin):
     pass
 
@@ -152,16 +104,7 @@ class UserProfileUpdate(UserProfileBase, IDOptionalMixin):
     template_id: UUID
 
 
-# Properties in DB
-class Template(TemplateBase, ORMModeMixin):
-    pass
-
-
-class User(UserBase, ORMModeMixin):
-    is_admin: bool
-    is_premium: bool
-
-
+# properties in DB
 class Skill(SkillBase, ORMModeMixin):
     pass
 
