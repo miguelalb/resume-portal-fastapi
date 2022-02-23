@@ -64,18 +64,3 @@ def upgrade_user_to_premium(db: Session, user_id: str):
     db.refresh(user_obj)
     return user_obj
 
-
-def update_user_template(db: Session, user_id: str, template_id: str):
-    user_obj = get_user_by_id(db, user_id)
-    if user_obj is None:
-        raise Exc.ObjectNotFoundException("User")
-    user_obj.template_id = template_id
-    db.commit()
-    db.refresh(user_obj)
-    return user_obj.template
-
-
-def get_user_template(db: Session, user_id: str):
-    return db.query(models.Template)\
-        .join(models.User)\
-        .filter(models.User.id == user_id).first()

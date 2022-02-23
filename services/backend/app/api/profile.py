@@ -4,16 +4,19 @@ from app import crud, schemas
 from app.dependencies import get_db, get_user
 from app.exceptions import Exc
 from app.security import decode_access_token
+from app.utils import render_template
 from fastapi import APIRouter, Depends, Header, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-@router.get("/{public_name}", response_model=schemas.UserProfile)
+@router.get("/{public_name}", response_model=schemas.UserProfileRender)
 async def get_profile_by_public_name(public_name: str, db: Session = Depends(get_db)):
     user_profile = crud.get_user_profile_by_public_name(db, public_name)
     if user_profile is None:
         raise Exc.ObjectNotFoundException("User Profile")
+    
+    # template = render_template(template_content, data)
     return schemas.UserProfile.from_orm(user_profile)
 
 

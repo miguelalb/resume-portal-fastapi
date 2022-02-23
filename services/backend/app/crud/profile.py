@@ -3,6 +3,7 @@ from typing import List
 from app import models, schemas
 from app.crud.crud_base import create_generic_profile_child, delete_generic
 from app.exceptions import Exc
+from app.utils import get_object_name_from_schema
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -31,7 +32,6 @@ def create_user_profile(
        first_name=profile_in.first_name,
        last_name=profile_in.last_name,
        public_name=profile_in.public_name,
-       theme=profile_in.theme,
        summary=profile_in.summary,
        email=profile_in.email,
        phone=profile_in.phone,
@@ -39,6 +39,7 @@ def create_user_profile(
     )
     db.add(user_profile_object)
     user_profile_object.user_id = user_id
+    user_profile_object.template_id = profile_in.template_id
     
     if profile_in.skills and len(profile_in.skills) > 0:
         for skill in profile_in.skills:
@@ -71,19 +72,32 @@ def create_user_profile(
 
 def update_each_or_create(
     db: Session, model, incoming_objects: List, profile_id: str):
+    """
+    Generic bulk update operation.
+    If incoming object already exists in the db, then it updates 
+    with incoming changes. Otherwise it creates a new instance.
+    """
     for obj_in in incoming_objects:
         if not obj_in.deleted:
             if hasattr(obj_in, "id") and obj_in.id is not None:
                 old_object_inDB = db.query(model).filter(
                     model.id == obj_in.id).update(obj_in.dict())
+                if old_object_inDB is None:
+                    obj_name = get_object_name_from_schema(obj_in)
+                    raise Exc.ObjectNotFoundException(obj_name)
             else:
                 create_generic_profile_child(db, model, obj_in, profile_id)
 
 
 def filter_out_removed(db: Session, model, incoming_objects: List):
+    """
+    Generic bulk update operation.
+    If the object is marked as deleted,
+    it deletes from the DB.
+    """
     for obj_in in incoming_objects:
         if obj_in.deleted:
-            delete_generic(db, model, obj_in.id)  
+            delete_generic(db, model, obj_in.id)
 
 
 def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, profile_id: str, user_id: str):
@@ -96,11 +110,11 @@ def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, prof
     profile_inDB.first_name = profile_in.first_name
     profile_inDB.last_name = profile_in.last_name
     profile_inDB.public_name = profile_in.public_name
-    profile_inDB.theme = profile_in.theme
     profile_inDB.summary = profile_in.summary
     profile_inDB.email = profile_in.email
     profile_inDB.phone = profile_in.phone
     profile_inDB.designation = profile_in.designation
+    profile_inDB.template_id = profile_in.template_id
 
     # Update, Create new and Delete removed
     update_each_or_create(db, models.Skill, profile_in.skills, profile_in.id)

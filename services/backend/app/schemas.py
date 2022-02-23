@@ -43,7 +43,6 @@ class UserProfileBase(BaseModel):
     first_name: str
     last_name: str
     public_name: str
-    theme: str
     summary: str
     email: str
     phone: str
@@ -83,6 +82,10 @@ class CertificationBase(BaseModel):
     credential_url: Optional[AnyUrl] = None
 
 
+class UserProfileRender(BaseModel):
+    content: str
+
+
 # Properties on Create
 class UserCreate(UserBase):
     password: str
@@ -113,6 +116,7 @@ class UserProfileCreate(UserProfileBase):
     jobs: Optional[List[JobCreate]] = []
     educations: Optional[List[EducationCreate]] = []
     certifications: Optional[List[CertificationCreate]] = []
+    template_id: UUID
 
 
 # Properties on Update
@@ -145,6 +149,7 @@ class UserProfileUpdate(UserProfileBase, IDOptionalMixin):
     jobs: Optional[List[JobUpdate]] = []
     educations: Optional[List[EducationUpdate]] = []
     certifications: Optional[List[CertificationUpdate]] = []
+    template_id: UUID
 
 
 # Properties in DB
@@ -155,7 +160,6 @@ class Template(TemplateBase, ORMModeMixin):
 class User(UserBase, ORMModeMixin):
     is_admin: bool
     is_premium: bool
-    template: Optional[Template] = None
 
 
 class Skill(SkillBase, ORMModeMixin):
@@ -179,3 +183,4 @@ class UserProfile(UserProfileBase, ORMModeMixin):
     jobs: Optional[List[Job]] = []
     educations: Optional[List[Education]] = []
     certifications: Optional[List[Certification]] = []
+    template: Optional[Template] = None

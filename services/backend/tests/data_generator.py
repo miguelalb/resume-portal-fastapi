@@ -56,7 +56,6 @@ def get_sample_profile():
         "first_name": "SampleFirst" + str(random.randint(0,sys.maxsize)),
         "last_name": "SampleLast" + str(random.randint(0,sys.maxsize)),
         "public_name": "SamplePublic" + str(random.randint(0,sys.maxsize)),
-        "theme": "SampleTheme" + str(random.randint(0,sys.maxsize)),
         "summary": "SampleSummary" + str(random.randint(0,sys.maxsize)),
         "email": str(random.randint(0,sys.maxsize)) + "@email.com",
         "phone": str(random.randint(0,sys.maxsize)),

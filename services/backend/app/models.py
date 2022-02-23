@@ -35,14 +35,11 @@ class User(Base, BaseMixin, TimestampMixin):
     password = Column(String, index=True)
     is_admin = Column(Boolean, default=False)
     is_premium = Column(Boolean, default=False)
-    template_id = Column(UUID(as_uuid=True), ForeignKey('template.id'))
 
     profile = relationship(
         "UserProfile", cascade="all,delete",
         back_populates="user", uselist=False)
     
-    template = relationship(
-        "Template", back_populates="users", lazy="joined")
 
     def __str__(self):
         return f"<User: {self.username}>"
@@ -53,8 +50,8 @@ class Template(Base, BaseMixin, TimestampMixin):
     content = Column(Text)
     premium = Column(Boolean, default=False, index=True)
 
-    users = relationship(
-        "User", back_populates="template")
+    user_profiles = relationship(
+        "UserProfile", back_populates="template")
     
     def __str__(self):
         return f"<Template: {self.name}>"
@@ -65,12 +62,12 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
     first_name = Column(String)
     last_name = Column(String)
     public_name = Column(String)
-    theme = Column(String)
     summary = Column(String)
     email = Column(String)
     phone = Column(String)
     designation = Column(String)
     user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
+    template_id = Column(UUID(as_uuid=True), ForeignKey('template.id'))
 
     user = relationship("User", back_populates="profile")
     skills = relationship("Skill", cascade="all,delete",
@@ -81,6 +78,8 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
         back_populates="profile", lazy="joined")
     certifications = relationship("Certification", cascade="all,delete",
         back_populates="profile", lazy="joined")
+    template = relationship(
+        "Template", back_populates="user_profiles", lazy="joined")
 
 
     def __str__(self):
