@@ -9,13 +9,17 @@ from sqlalchemy.orm import Session
 
 
 def get_user_profile_by_public_name(db: Session, public_name: str):
-    return db.query(models.UserProfile)\
-        .filter(models.UserProfile.public_name == public_name).first()
+    return (
+        db.query(models.UserProfile)
+        .filter(models.UserProfile.public_name == public_name)
+        .first()
+    )
 
 
 def get_user_profile_by_id(db: Session, profile_id: str):
-    return db.query(models.UserProfile)\
-        .filter(models.UserProfile.id == profile_id).first()
+    return (
+        db.query(models.UserProfile).filter(models.UserProfile.id == profile_id).first()
+    )
 
 
 def validate_publicname(db: Session, public_name: str):
@@ -25,22 +29,23 @@ def validate_publicname(db: Session, public_name: str):
 
 
 def create_user_profile(
-    db: Session, profile_in: schemas.UserProfileCreate, user_id: str):
+    db: Session, profile_in: schemas.UserProfileCreate, user_id: str
+):
     validate_publicname(db, profile_in.public_name)
-    
+
     user_profile_object = models.UserProfile(
-       first_name=profile_in.first_name,
-       last_name=profile_in.last_name,
-       public_name=profile_in.public_name,
-       summary=profile_in.summary,
-       email=profile_in.email,
-       phone=profile_in.phone,
-       designation=profile_in.designation
+        first_name=profile_in.first_name,
+        last_name=profile_in.last_name,
+        public_name=profile_in.public_name,
+        summary=profile_in.summary,
+        email=profile_in.email,
+        phone=profile_in.phone,
+        designation=profile_in.designation,
     )
     db.add(user_profile_object)
     user_profile_object.user_id = user_id
     user_profile_object.template_id = profile_in.template_id
-    
+
     if profile_in.skills and len(profile_in.skills) > 0:
         for skill in profile_in.skills:
             skill_in = jsonable_encoder(skill)
@@ -52,36 +57,36 @@ def create_user_profile(
             job_in = jsonable_encoder(job)
             db_job = models.Job(**job_in)
             user_profile_object.jobs.append(db_job)
-    
+
     if profile_in.educations and len(profile_in.educations) > 0:
         for education in profile_in.educations:
             education_in = jsonable_encoder(education)
             db_education = models.Education(**education_in)
             user_profile_object.educations.append(db_education)
-    
+
     if profile_in.certifications and len(profile_in.certifications) > 0:
         for certification in profile_in.certifications:
             certification_in = jsonable_encoder(certification)
             db_certification = models.Certification(**certification_in)
             user_profile_object.certifications.append(db_certification)
-    
+
     db.commit()
     db.refresh(user_profile_object)
     return user_profile_object
 
 
-def update_each_or_create(
-    db: Session, model, incoming_objects: List, profile_id: str):
+def update_each_or_create(db: Session, model, incoming_objects: List, profile_id: str):
     """
     Generic bulk update operation.
-    If incoming object already exists in the db, then it updates 
+    If incoming object already exists in the db, then it updates
     with incoming changes. Otherwise it creates a new instance.
     """
     for obj_in in incoming_objects:
         if not obj_in.deleted:
             if hasattr(obj_in, "id") and obj_in.id is not None:
-                old_object_inDB = db.query(model).filter(
-                    model.id == obj_in.id).update(obj_in.dict())
+                old_object_inDB = (
+                    db.query(model).filter(model.id == obj_in.id).update(obj_in.dict())
+                )
                 if old_object_inDB is None:
                     obj_name = get_object_name_from_schema(obj_in)
                     raise Exc.ObjectNotFoundException(obj_name)
@@ -100,13 +105,15 @@ def filter_out_removed(db: Session, model, incoming_objects: List):
             delete_generic(db, model, obj_in.id)
 
 
-def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, profile_id: str, user_id: str):
+def update_user_profile(
+    db: Session, profile_in: schemas.UserProfileUpdate, profile_id: str, user_id: str
+):
     profile_inDB = get_user_profile_by_id(db, profile_id)
     if profile_inDB is None:
         raise Exc.ObjectNotFoundException("User Profile")
     if profile_inDB.public_name != profile_in.public_name:
         validate_publicname(db, profile_in.public_name)
-    
+
     profile_inDB.first_name = profile_in.first_name
     profile_inDB.last_name = profile_in.last_name
     profile_inDB.public_name = profile_in.public_name
@@ -122,11 +129,13 @@ def update_user_profile(db: Session, profile_in: schemas.UserProfileUpdate, prof
 
     update_each_or_create(db, models.Job, profile_in.jobs, profile_in.id)
     filter_out_removed(db, models.Job, profile_in.jobs)
-    
+
     update_each_or_create(db, models.Education, profile_in.educations, profile_in.id)
     filter_out_removed(db, models.Education, profile_in.educations)
-    
-    update_each_or_create(db, models.Certification, profile_in.certifications, profile_in.id)
+
+    update_each_or_create(
+        db, models.Certification, profile_in.certifications, profile_in.id
+    )
     filter_out_removed(db, models.Certification, profile_in.certifications)
 
     db.commit()

@@ -2,8 +2,12 @@ import logging
 
 import pytest
 from app.config import get_settings
-from app.crud import (create_user, get_user_by_username, promote_user,
-                      upgrade_user_to_premium)
+from app.crud import (
+    create_user,
+    get_user_by_username,
+    promote_user,
+    upgrade_user_to_premium,
+)
 from app.dependencies import get_db
 from app.main import create_application
 from app.models import Base
@@ -21,12 +25,14 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 Base.metadata.create_all(bind=engine)
 
+
 def override_get_db():
     try:
         db = TestingSessionLocal()
         yield db
     finally:
         db.close()
+
 
 @pytest.fixture(scope="module")
 def test_app():
@@ -36,8 +42,9 @@ def test_app():
 
         # testing
         yield test_client
-    
+
     # tear down
+
 
 @pytest.fixture(scope="module")
 def superuser():
@@ -55,8 +62,9 @@ def superuser():
 def access_token(superuser, test_app):
     response = test_app.post(
         f"/auth/login?username={superuser.username}&password={superuser.password}",
-        headers={'accept': 'application/json'},
-        data='')
+        headers={"accept": "application/json"},
+        data="",
+    )
     tokens = response.json()
     logging.info("Getting access token")
     logging.info("Access token:", tokens["access_token"])

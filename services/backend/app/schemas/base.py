@@ -8,6 +8,7 @@ from pydantic import BaseModel
 class IDOptionalMixin(BaseModel):
     id: Optional[UUID] = None
 
+
 class ORMModeMixin(BaseModel):
     id: UUID
 
@@ -17,4 +18,3 @@ class ORMModeMixin(BaseModel):
 
 class DeletedMixin(BaseModel):
     deleted: Optional[bool] = None
-

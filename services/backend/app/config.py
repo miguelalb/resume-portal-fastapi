@@ -6,18 +6,18 @@ from pydantic import BaseSettings, PostgresDsn, validator
 
 class Settings(BaseSettings):
     PROJECT_NAME: str
-    ENVIRONMENT: str = 'dev'
+    ENVIRONMENT: str = "dev"
     SECRET_KEY: str
     CRYP_SCHEME: str
     JWT_TOKEN_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    SUPERUSER: str = ''
-    SUPERUSER_PASS: str = ''
+    SUPERUSER: str = ""
+    SUPERUSER_PASS: str = ""
 
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    BACKEND_CORS_ORIGINS: Optional[List[str]] = ['*']
+    BACKEND_CORS_ORIGINS: Optional[List[str]] = ["*"]
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
         elif isinstance(v, (list, str)):
             return v
         raise ValueError(v)
-    
+
     POSTGRES_SERVER: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
@@ -45,11 +45,13 @@ class Settings(BaseSettings):
             host=values.get("POSTGRES_SERVER"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
-    
+
     SQLALCHEMY_DATABASE_TEST_URI: Optional[PostgresDsn] = None
-    
+
     @validator("SQLALCHEMY_DATABASE_TEST_URI", pre=True)
-    def assemble_test_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
+    def assemble_test_db_connection(
+        cls, v: Optional[str], values: Dict[str, Any]
+    ) -> Any:
         if isinstance(v, str):
             return v
         return PostgresDsn.build(
@@ -59,7 +61,7 @@ class Settings(BaseSettings):
             host=values.get("POSTGRES_SERVER"),
             path=f"/{values.get('POSTGRES_TEST_DB') or ''}",
         )
-    
+
     class Config:
         case_sensitive = True
 
@@ -67,4 +69,3 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings():
     return Settings()
-

@@ -10,17 +10,18 @@ from app.database import Base
 
 
 class BaseMixin(object):
-    """ Shared properties and common functionality """
+    """Shared properties and common functionality"""
 
     @declared_attr
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    id = Column(UUID(as_uuid=True), primary_key=True,
-                default=uuid.uuid4, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+
 
 class TimestampMixin(object):
     created_at = Column(String, default=datetime.utcnow().timestamp())
+
 
 class CurrentMixin(object):
     current = Column(Boolean, default=False)
@@ -37,9 +38,8 @@ class User(Base, BaseMixin, TimestampMixin):
     is_premium = Column(Boolean, default=False)
 
     profile = relationship(
-        "UserProfile", cascade="all,delete",
-        back_populates="user", uselist=False)
-    
+        "UserProfile", cascade="all,delete", back_populates="user", uselist=False
+    )
 
     def __str__(self):
         return f"<User: {self.username}>"
@@ -50,12 +50,10 @@ class Template(Base, BaseMixin, TimestampMixin):
     content = Column(Text)
     premium = Column(Boolean, default=False, index=True)
 
-    user_profiles = relationship(
-        "UserProfile", back_populates="template")
-    
+    user_profiles = relationship("UserProfile", back_populates="template")
+
     def __str__(self):
         return f"<Template: {self.name}>"
-    
 
 
 class UserProfile(Base, BaseMixin, TimestampMixin):
@@ -66,21 +64,23 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
     email = Column(String)
     phone = Column(String)
     designation = Column(String)
-    user_id = Column(UUID(as_uuid=True), ForeignKey('user.id'))
-    template_id = Column(UUID(as_uuid=True), ForeignKey('template.id'))
+    user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"))
+    template_id = Column(UUID(as_uuid=True), ForeignKey("template.id"))
 
     user = relationship("User", back_populates="profile")
-    skills = relationship("Skill", cascade="all,delete",
-        back_populates="profile", lazy="joined")
-    jobs = relationship("Job", cascade="all,delete",
-        back_populates="profile", lazy="joined")
-    educations = relationship("Education", cascade="all,delete",
-        back_populates="profile", lazy="joined")
-    certifications = relationship("Certification", cascade="all,delete",
-        back_populates="profile", lazy="joined")
-    template = relationship(
-        "Template", back_populates="user_profiles", lazy="joined")
-
+    skills = relationship(
+        "Skill", cascade="all,delete", back_populates="profile", lazy="joined"
+    )
+    jobs = relationship(
+        "Job", cascade="all,delete", back_populates="profile", lazy="joined"
+    )
+    educations = relationship(
+        "Education", cascade="all,delete", back_populates="profile", lazy="joined"
+    )
+    certifications = relationship(
+        "Certification", cascade="all,delete", back_populates="profile", lazy="joined"
+    )
+    template = relationship("Template", back_populates="user_profiles", lazy="joined")
 
     def __str__(self):
         return f"<Profile: {self.first_name} {self.last_name}>"
@@ -89,12 +89,13 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
 class Skill(Base, BaseMixin, DeletedMixin):
     name = Column(String, index=True)
     learning = Column(Boolean, default=False)
-    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+    profile_id = Column(UUID(as_uuid=True), ForeignKey("userprofile.id"))
 
     profile = relationship("UserProfile", back_populates="skills")
 
     def __str__(self):
         return f"<Skill: {self.name}>"
+
 
 class Job(Base, BaseMixin, CurrentMixin, DeletedMixin):
     company = Column(String, index=True)
@@ -102,7 +103,7 @@ class Job(Base, BaseMixin, CurrentMixin, DeletedMixin):
     description = Column(Text)
     startdate = Column(String)
     enddate = Column(String, nullable=True)
-    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+    profile_id = Column(UUID(as_uuid=True), ForeignKey("userprofile.id"))
 
     profile = relationship("UserProfile", back_populates="jobs")
 
@@ -116,12 +117,13 @@ class Education(Base, BaseMixin, CurrentMixin, DeletedMixin):
     description = Column(Text)
     startdate = Column(String)
     enddate = Column(String, nullable=True)
-    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+    profile_id = Column(UUID(as_uuid=True), ForeignKey("userprofile.id"))
 
     profile = relationship("UserProfile", back_populates="educations")
 
     def __str__(self):
         return f"<Education: {self.college}>"
+
 
 class Certification(Base, BaseMixin, CurrentMixin, DeletedMixin):
     name = Column(String, index=True)
@@ -130,7 +132,7 @@ class Certification(Base, BaseMixin, CurrentMixin, DeletedMixin):
     expiration_date = Column(String, nullable=True)
     credential_id = Column(String, nullable=True)
     credential_url = Column(String, nullable=True)
-    profile_id = Column(UUID(as_uuid=True), ForeignKey('userprofile.id'))
+    profile_id = Column(UUID(as_uuid=True), ForeignKey("userprofile.id"))
 
     profile = relationship("UserProfile", back_populates="certifications")
 

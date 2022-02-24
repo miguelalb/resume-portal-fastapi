@@ -1,8 +1,12 @@
 import click
 
 from app.config import get_settings
-from app.crud import (create_user, get_user_by_username, promote_user,
-                      upgrade_user_to_premium)
+from app.crud import (
+    create_user,
+    get_user_by_username,
+    promote_user,
+    upgrade_user_to_premium,
+)
 from app.dependencies import get_db
 from app.schemas import UserCreate
 
@@ -16,13 +20,18 @@ def cli():
 
 @cli.command("create-superuser")
 def create_superuser():
-    if settings.SUPERUSER == '' or settings.SUPERUSER_PASS == '':
-        click.echo(click.style("Unable to create superuser. Please make sure SUPERUSER and SUPERUSER_PASS are populated in your environment variables!", fg="red", bold=True))
+    if settings.SUPERUSER == "" or settings.SUPERUSER_PASS == "":
+        click.echo(
+            click.style(
+                "Unable to create superuser. Please make sure SUPERUSER and SUPERUSER_PASS are populated in your environment variables!",
+                fg="red",
+                bold=True,
+            )
+        )
+        return
+
     db = next(get_db())
-    user_obj = UserCreate(
-        username=settings.SUPERUSER,
-        password=settings.SUPERUSER_PASS
-    )
+    user_obj = UserCreate(username=settings.SUPERUSER, password=settings.SUPERUSER_PASS)
     user = get_user_by_username(db, user_obj.username)
     if user is None:
         user = create_user(db, user_obj)

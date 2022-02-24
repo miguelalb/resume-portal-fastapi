@@ -12,11 +12,11 @@ def render_template(template_content: str, data: dict) -> str:
 def get_object_name_from_schema(obj: object) -> str:
     """
     Returns the name of an object based on type.
-    This is used to return a userfriendly exception 
+    This is used to return a userfriendly exception
     to the client on bulk update operations.
     """
     obj_name = type(obj).__name__
-    to_remove = ["Base", "Create",  "Update"]
+    to_remove = ["Base", "Create", "Update"]
     for item in to_remove:
         if item in obj_name:
             obj_name = obj_name.replace(item, "")

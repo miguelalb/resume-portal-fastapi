@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
+
 @router.post("/login")
 async def login(username: str, password: str, db: Session = Depends(get_db)):
     user = authenticate_user(db, username, password)
@@ -14,8 +15,8 @@ async def login(username: str, password: str, db: Session = Depends(get_db)):
 
 
 @router.post(
-    "/register",
-    response_model=schemas.User, status_code=status.HTTP_201_CREATED)
+    "/register", response_model=schemas.User, status_code=status.HTTP_201_CREATED
+)
 async def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
     user = crud.create_user(db, user_in)
     return schemas.User.from_orm(user)

@@ -5,7 +5,7 @@ def test_create_profile(test_app, auth_headers):
     template = get_sample_template()
     response = test_app.post("/template", headers=auth_headers, json=template)
     assert response.status_code == 201
-    
+
     data = get_sample_profile()
     data["template_id"] = response.json()["id"]
     response = test_app.post("/profile", headers=auth_headers, json=data)
@@ -13,14 +13,16 @@ def test_create_profile(test_app, auth_headers):
     assert response.status_code == 201
     assert response.json()["first_name"] == data["first_name"]
     assert response.json()["public_name"] == data["public_name"]
-    assert response.json()["educations"][0]["college"] == data["educations"][0]["college"]
+    assert (
+        response.json()["educations"][0]["college"] == data["educations"][0]["college"]
+    )
 
 
 # def test_get_profile_by_public_name(test_app, auth_headers):
 #     template = get_sample_template()
 #     response = test_app.post("/template", headers=auth_headers, json=template)
 #     assert response.status_code == 201
-    
+
 #     data = get_sample_profile()
 #     data["template_id"] = response.json()["id"]
 #     response = test_app.post("/profile", headers=auth_headers, json=data)
@@ -42,13 +44,13 @@ def test_get_my_profile(test_app, auth_headers):
     template = get_sample_template()
     response = test_app.post("/template", headers=auth_headers, json=template)
     assert response.status_code == 201
-    
+
     data = get_sample_profile()
     data["template_id"] = response.json()["id"]
     response = test_app.post("/profile", headers=auth_headers, json=data)
     assert response.status_code == 201
 
-    response = test_app.get("/profile/me",headers=auth_headers)
+    response = test_app.get("/profile/me", headers=auth_headers)
     assert response.status_code == 200
 
 
@@ -56,7 +58,7 @@ def test_delete_profile(test_app, auth_headers):
     template = get_sample_template()
     response = test_app.post("/template", headers=auth_headers, json=template)
     assert response.status_code == 201
-    
+
     data = get_sample_profile()
     data["template_id"] = response.json()["id"]
     response = test_app.post("/profile", headers=auth_headers, json=data)
@@ -84,7 +86,9 @@ def test_update_profile(test_app, auth_headers):
 
     data_updated = get_sample_profile()
     data_updated["template_id"] = template_id
-    response = test_app.put(f"/profile/{profile_id}", headers=auth_headers, json=data_updated)
+    response = test_app.put(
+        f"/profile/{profile_id}", headers=auth_headers, json=data_updated
+    )
     assert response.status_code == 200
     assert response.json()["first_name"] == data_updated["first_name"]
     assert response.json()["public_name"] == data_updated["public_name"]

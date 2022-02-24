@@ -6,13 +6,11 @@ from sqlalchemy.orm import Session
 
 
 def get_user_by_id(db: Session, user_id: str):
-    return db.query(models.User)\
-        .filter(models.User.id == user_id).first()
+    return db.query(models.User).filter(models.User.id == user_id).first()
 
 
 def get_user_by_username(db: Session, username: str):
-    return db.query(models.User)\
-        .filter(models.User.username == username).first()
+    return db.query(models.User).filter(models.User.username == username).first()
 
 
 def create_user(db: Session, user_in: schemas.UserCreate):
@@ -20,10 +18,7 @@ def create_user(db: Session, user_in: schemas.UserCreate):
     if user_inDB is not None:
         raise Exc.NameTakenException("Username")
     password_hash = get_password_hash(user_in.password)
-    user_obj = models.User(
-        username=user_in.username,
-        password=password_hash
-    )
+    user_obj = models.User(username=user_in.username, password=password_hash)
     db.add(user_obj)
     db.commit()
     db.refresh(user_obj)
@@ -63,4 +58,3 @@ def upgrade_user_to_premium(db: Session, user_id: str):
     db.commit()
     db.refresh(user_obj)
     return user_obj
-

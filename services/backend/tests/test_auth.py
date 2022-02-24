@@ -3,8 +3,8 @@ import sys
 
 
 def get_random_user():
-    username = "SampleUser" + str(random.randint(0,sys.maxsize))
-    password = "SamplePassword" + str(random.randint(0,sys.maxsize))
+    username = "SampleUser" + str(random.randint(0, sys.maxsize))
+    password = "SamplePassword" + str(random.randint(0, sys.maxsize))
     return {"username": username, "password": password}
 
 

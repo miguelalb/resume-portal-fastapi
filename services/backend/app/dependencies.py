@@ -15,13 +15,11 @@ def get_db():
         db.close()
 
 
-def get_user(
-    token: Optional[str] = Header(None),
-    db: Session = Depends(get_db)):
+def get_user(token: Optional[str] = Header(None), db: Session = Depends(get_db)):
     user = decode_access_token(db, token)
     return user
 
 
-def get_admin_user(user = Depends(get_user)):
+def get_admin_user(user=Depends(get_user)):
     admin_required(user)
     return user
