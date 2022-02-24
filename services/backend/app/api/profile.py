@@ -15,9 +15,15 @@ async def get_profile_by_public_name(public_name: str, db: Session = Depends(get
     user_profile = crud.get_user_profile_by_public_name(db, public_name)
     if user_profile is None:
         raise Exc.ObjectNotFoundException("User Profile")
-    
+    #TODO Complete jinja2 render. This should return the decoded HTML
     # template = render_template(template_content, data)
     return schemas.UserProfile.from_orm(user_profile)
+
+
+@router.get("/me", response_model=schemas.UserProfile)
+async def get_profile_me(user = Depends(get_user), db: Session = Depends(get_db)):
+    profile_obj = crud.get_user_profile_by_id(db, user.profile_id)
+    return schemas.UserProfile.from_orm(profile_obj)
 
 
 @router.post("", response_model=schemas.UserProfile, status_code=status.HTTP_201_CREATED)

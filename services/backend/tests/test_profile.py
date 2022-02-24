@@ -38,6 +38,20 @@ def test_create_profile(test_app, auth_headers):
 #     assert response.json()["detail"] == "User Profile not found."
 
 
+def test_get_my_profile(test_app, auth_headers):
+    template = get_sample_template()
+    response = test_app.post("/template", headers=auth_headers, json=template)
+    assert response.status_code == 201
+    
+    data = get_sample_profile()
+    data["template_id"] = response.json()["id"]
+    response = test_app.post("/profile", headers=auth_headers, json=data)
+    assert response.status_code == 201
+
+    response = test_app.get("/profile/me",headers=auth_headers)
+    assert response.status_code == 200
+
+
 def test_delete_profile(test_app, auth_headers):
     template = get_sample_template()
     response = test_app.post("/template", headers=auth_headers, json=template)

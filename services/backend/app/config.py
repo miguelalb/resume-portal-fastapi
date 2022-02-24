@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     CRYP_SCHEME: str
     JWT_TOKEN_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    SUPERUSER: str = ''
+    SUPERUSER_PASS: str = ''
 
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
