@@ -22,15 +22,28 @@ def get_user_profile_by_id(db: Session, profile_id: str):
     )
 
 
+def get_user_profile_by_user_id(db: Session, user_id: str):
+    return (
+        db.query(models.UserProfile).filter(models.UserProfile.user_id == user_id).first()
+    )
+
+
 def validate_publicname(db: Session, public_name: str):
     user_profile_inDB = get_user_profile_by_public_name(db, public_name)
     if user_profile_inDB is not None:
         raise Exc.NameTakenException("Public name")
 
 
+def validate_existing_profile(db: Session, user_id: str):
+    user_profile_inDB = get_user_profile_by_user_id(db, user_id)
+    if user_profile_inDB is not None:
+        raise Exc.ExistingProfileException
+
+
 def create_user_profile(
     db: Session, profile_in: schemas.UserProfileCreate, user_id: str
 ):
+    validate_existing_profile(db, user_id)
     validate_publicname(db, profile_in.public_name)
 
     user_profile_object = models.UserProfile(

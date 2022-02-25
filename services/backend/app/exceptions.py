@@ -33,3 +33,8 @@ class Exc:
         status_code=status.HTTP_403_FORBIDDEN,
         detail="You don't have enough permissions to access this resource. Please contact your administrator",
     )
+
+    ExistingProfileException = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="This user already has a profile attached. Multiple profiles are not supported in this version."
+    )
