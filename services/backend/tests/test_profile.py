@@ -56,25 +56,5 @@ def test_update_profile(test_app, auth_headers):
     assert response.json()["template"]["id"] == new_template_id
 
 
-# def test_get_profile_by_public_name(test_app, auth_headers):
-#     template = get_sample_template()
-#     response = test_app.post("/template", headers=auth_headers, json=template)
-#     assert response.status_code == 201
-
-#     data = get_sample_profile()
-#     data["template_id"] = response.json()["id"]
-#     response = test_app.post("/profile", headers=auth_headers, json=data)
-
-#     assert response.status_code == 201
-#     public_name = response.json()["public_name"]
-
-#     response = test_app.get(f"/profile/{public_name}")
-#     assert response.status_code == 200
-#     assert response.json()["first_name"] == data["first_name"]
-#     assert response.json()["public_name"] == data["public_name"]
-
-#     response = test_app.get("/profile/wrong_profile_public_name")
-#     assert response.status_code == 404
-#     assert response.json()["detail"] == "User Profile not found."
-
-
+def test_get_profile_by_public_name(test_app, auth_headers):
+    pass #TODO
