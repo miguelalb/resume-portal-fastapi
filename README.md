@@ -1,5 +1,10 @@
 # Resume Maker Portal App
 
+_**Note**: Work in progress:_
+
+- _Backend API - 90% completed_
+- _Frontend - 10% completed_
+
 The Resume Maker Portal App is an Open Source tool that helps you create a modern :fire: and professional resume!
 
 - [x] Add your information once :sparkles:
@@ -23,7 +28,7 @@ The Resume Maker Portal App is an Open Source tool that helps you create a moder
    `git clone https://github.com/miguelalb/resume-portal-fastapi.git`
 2. Add a `.env` file to the root of the project as shown in `example.env`
 3. Start the stack with Docker Compose:
-   `docker-compose up -d`
+   `docker-compose up -d --build`
 
 4. Use [Alembic](https://alembic.sqlalchemy.org/en/latest/tutorial.html) to create the tables and run migrations:
 

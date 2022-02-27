@@ -1,12 +1,8 @@
 import click
 
 from app.config import get_settings
-from app.crud import (
-    create_user,
-    get_user_by_username,
-    promote_user,
-    upgrade_user_to_premium,
-)
+from app.crud import (create_user, get_user_by_username, promote_user,
+                      upgrade_user_to_premium)
 from app.dependencies import get_db
 from app.schemas import UserCreate
 
@@ -42,14 +38,13 @@ def create_superuser():
     click.echo(click.style("Superuser already exists!", fg="yellow", bold=True))
 
 
-@cli.command("say")
-def hello():
+@cli.command("seed-db")
+def seed_database():
+    click.echo(click.style("Adding templates...", fg="yellow", bold=True))
+    with open("./templates_seed/sample1.html", "r") as f:
+        content = f.readall()
+    
     click.echo("Hello")
-
-
-@cli.command("bye")
-def goodby():
-    click.echo("GoodBye!")
 
 
 if __name__ == "__main__":
