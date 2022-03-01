@@ -79,13 +79,9 @@ def seed_database():
     click.echo(click.style("Adding templates...", fg="yellow", bold=True))
     add_templates()
     click.echo(click.style("Templates added!", fg="green", bold=True))
-    #TODO Seed users and profiles.
     click.echo(click.style("Adding fake users and profiles...", fg="yellow", bold=True))
     add_fake_users_profiles()
     click.echo(click.style("Fake profile created!", fg="green", bold=True))
-
-    
-
 
 
 if __name__ == "__main__":
