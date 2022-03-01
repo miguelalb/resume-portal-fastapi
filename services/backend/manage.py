@@ -1,10 +1,14 @@
+import base64
+import pathlib
+
 import click
 
 from app.config import get_settings
-from app.crud import (create_user, get_user_by_username, promote_user,
+from app.crud import (create_template, create_user, get_all_templates_internal,
+                      get_user_by_username, promote_user,
                       upgrade_user_to_premium)
 from app.dependencies import get_db
-from app.schemas import UserCreate
+from app.schemas import TemplateCreate, UserCreate
 
 settings = get_settings()
 
@@ -38,13 +42,24 @@ def create_superuser():
     click.echo(click.style("Superuser already exists!", fg="yellow", bold=True))
 
 
+def add_templates():
+    db = next(get_db())
+    templates = get_all_templates_internal(db)
+    if templates is None or len(templates) == 0:
+        for path in pathlib.Path("templates_seed").glob("*.html"):
+            name = path.stem
+            content = path.read_text()
+            i = content.encode('utf-8')
+            encoded = base64.b64encode(i).decode('utf-8')
+            template = TemplateCreate(name=name, content=encoded, premium=False)
+            create_template(db, template)
+
+
 @cli.command("seed-db")
 def seed_database():
     click.echo(click.style("Adding templates...", fg="yellow", bold=True))
-    with open("./templates_seed/sample1.html", "r") as f:
-        content = f.readall()
-    
-    click.echo("Hello")
+    add_templates()
+    click.echo(click.style("Templates added!", fg="green", bold=True))
 
 
 if __name__ == "__main__":

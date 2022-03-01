@@ -4,11 +4,11 @@ from jinja2 import BaseLoader, Environment
 
 
 def render_template(template_content: str, data: dict) -> str:
-    content = base64.b64decode(template_content).decode("ascii")
+    content = base64.b64decode(template_content).decode("utf-8")
     rtemplate = Environment(loader=BaseLoader).from_string(content)
     data = rtemplate.render(**data)
-    i = data.encode("ascii")
-    return base64.b64encode(i).decode("ascii")
+    i = data.encode("utf-8")
+    return base64.b64encode(i).decode("utf-8")
 
 
 

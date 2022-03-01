@@ -1,4 +1,4 @@
-from .data_generator import get_sample_template
+from .fake_data_generator import get_sample_template
 
 
 def test_create_template(test_app, auth_headers):

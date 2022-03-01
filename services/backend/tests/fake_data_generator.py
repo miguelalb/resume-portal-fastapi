@@ -2,6 +2,10 @@ import random
 import sys
 from datetime import datetime
 
+from faker import Faker
+
+fake = Faker()
+
 
 def get_sample_template():
     name = "Sample" + str(random.randint(0, sys.maxsize))

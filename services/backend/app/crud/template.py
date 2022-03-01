@@ -10,6 +10,10 @@ def get_templates(db: Session, user: models.User):
     return db.query(models.Template).filter(models.Template.premium == False).all()
 
 
+def get_all_templates_internal(db: Session):
+    return db.query(models.Template).all()
+
+
 def get_template_by_id(db: Session, id: str):
     return db.query(models.Template).filter(models.Template.id == id).first()
 

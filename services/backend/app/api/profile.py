@@ -11,8 +11,10 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.get("/me", response_model=schemas.UserProfile)
+@router.get("/me")
 async def get_profile_me(user=Depends(get_user), db: Session = Depends(get_db)):
+    if user.profile is None:
+        return {}
     profile_obj = crud.get_user_profile_by_id(db, user.profile.id)
     return schemas.UserProfile.from_orm(profile_obj)
 

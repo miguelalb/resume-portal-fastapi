@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{first_name}} {{last_name}} - Resume</title>
+</head>
+<body>
+    <section id="main">
+        <header id="title">
+            <h1>{{first_name}} {{last_name}}</h1>
+            <span class="subtitle">{{designation}}</span>
+        </header>
+        <section class="main-block">
+            <h2>Experiences</h2>
+            {% for job in jobs%}
+            <section class="blocks">
+                <div class="date">
+                    {% if job.current is True %}
+                    <span>{{job.startdate}}</span><span>present</span>
+                    {% else %}
+                    <span>{{job.startdate}}</span><span>{{job.enddate}}</span>
+                    {% endif %}
+                </div>
+                <div class="decorator">
+                </div>
+                <div class="details">
+                    <header>
+                        <h3>{{job.designation}}</h3>
+                        <span class="place">{{job.company}}</span>
+                    </header>
+                    <div>
+                        <ul>
+                            <li>{{job.description}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            {% endfor %}
+        </section>
+    </section>
+</body>
+</html>

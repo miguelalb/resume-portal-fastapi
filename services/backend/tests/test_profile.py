@@ -1,4 +1,4 @@
-from .data_generator import get_sample_profile, get_sample_template
+from .fake_data_generator import get_sample_profile, get_sample_template
 from .utils import ProfileUtils, TemplateUtils
 
 
