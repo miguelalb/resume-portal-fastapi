@@ -35,10 +35,12 @@ The Resume Maker Portal App is an Open Source tool that helps you create a moder
    - If you made changes to the models: `docker-compose exec backend alembic revision --autogenerate -m "First migration"`
    - Otherwise just run: `docker-compose exec backend alembic upgrade head`
 
-5. Run the follwing command to create a superuser with admin priviledges:
+5. Run the following command to create a superuser with admin priviledges:
    - `docker-compose exec backend python manage.py create-superuser`
    - _Note: This command requires_ `SUPERUSER` _and_ `SUPERUSER_PASS` _environment variables_
-6. Run the tests using pytest:
+6. Run the following command to seed the database with sample templates and user profiles:
+   - `docker-compose exec backend python manage.py seed-db`
+7. Run the tests using pytest:
    `docker-compose exec backend python -m pytest`
 
 **Now you can open your browser and interact with these URLs:**
