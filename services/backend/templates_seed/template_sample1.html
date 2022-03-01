@@ -389,7 +389,7 @@
         {% for job in jobs%}
         <section class="blocks">
             <div class="date">
-                {% if job.current is True %}
+                {% if job.current == True %}
                 <span>{{job.startdate}}</span><span>present</span>
                 {% else %}
                 <span>{{job.startdate}}</span><span>{{job.enddate}}</span>
@@ -417,7 +417,7 @@
             {% for education in educations %}
                 <section class="blocks">
                     <div class="date">
-                        {% if education.current is True %}
+                        {% if education.current == True %}
                         <span>{{education.startdate}}</span><span>present</span>
                         {% else %}
                         <span>{{education.startdate}}</span><span>{{education.enddate}}</span>
@@ -443,7 +443,7 @@
             {% for certification in certifications %}
             <section class="blocks">
                 <div class="date">
-                    {% if certification.current is True %}
+                    {% if certification.current == True %}
                     <span>{{certification.issue_date}}</span><span>Does not expire</span>
                     {% else %}
                     <span>{{certification.issue_date}}</span><span>{{certification.expiration_date}}</span>
@@ -455,10 +455,10 @@
                         <h3>{{certification.name}}</h3>
                         <span class="place">{{certification.issuing_organization}}</span>
                     </header>
-                    {% if certification.credential_id is not None %}
+                    {% if certification.credential_id != None %}
                     <div>Credential ID: {{certification.credential_id}}</div>
                     {% endif %}
-                    {% if certification.credential_url is not None %}
+                    {% if certification.credential_url != None %}
                     <div>Credential URL: <a href="{{certification.credential_url}}" target="_blank" rel="noopener noreferrer"></a></div>
                     {% endif %}
                 </div>
@@ -483,7 +483,7 @@
         <ul>
           {% for skill in skills %}
           <li>{{skill.name}}</li>
-          {% if skill.learning is True %}
+          {% if skill.learning == True %}
           <span>(learning)</span>
           {% endif %}
           {% endfor %}

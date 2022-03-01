@@ -5,7 +5,7 @@ from datetime import datetime
 from faker import Faker
 
 fake = Faker()
-
+#TODO Move on to Faker
 
 def get_sample_template():
     name = "Sample" + str(random.randint(0, sys.maxsize))
