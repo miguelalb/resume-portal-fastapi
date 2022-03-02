@@ -26,7 +26,7 @@ async def get_profile_by_public_name(public_name: str, db: Session = Depends(get
         raise Exc.ObjectNotFoundException("User Profile")
     
     template = crud.get_template_by_id(db, user_profile.template_id)
-    profile_obj = schemas.UserProfile.from_orm(user_profile)
+    profile_obj = schemas.UserProfilePrettyDate.from_orm(user_profile)
     content = render_template(template.content, profile_obj.dict())
     return schemas.UserProfileRender(content=content)
 

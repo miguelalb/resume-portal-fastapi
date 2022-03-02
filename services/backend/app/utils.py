@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime
 
 from jinja2 import BaseLoader, Environment
 
@@ -24,3 +25,14 @@ def get_object_name_from_schema(obj: object) -> str:
         if item in obj_name:
             obj_name = obj_name.replace(item, "")
     return obj_name
+
+
+def prettify_timestamp(value: str) -> str:
+    """
+    Returns a pretty version of a timestamp object.
+    Current format: 
+    - %b short name of month like Mar, Jun
+    - %d day of the month from 1 to 31
+    - %Y year in 4 digit format
+    """
+    return datetime.utcfromtimestamp(float(value)).strftime("%b %d %Y")

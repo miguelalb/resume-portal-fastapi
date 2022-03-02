@@ -1,7 +1,8 @@
 from typing import List, Optional
 from uuid import UUID
 
-from app.schemas.base import DeletedMixin, IDOptionalMixin, ORMModeMixin
+from app.schemas.base import (DeletedMixin, IDOptionalMixin, ORMModeMixin,
+                              PrettifyDatesMixin)
 from app.schemas.template import Template
 from pydantic import AnyUrl, BaseModel
 
@@ -113,11 +114,23 @@ class Job(JobBase, ORMModeMixin):
     pass
 
 
+class JobPrettyDate(Job, PrettifyDatesMixin):
+    pass
+
+
 class Education(EducationBase, ORMModeMixin):
     pass
 
 
+class EducationPrettyDate(Education, PrettifyDatesMixin):
+    pass
+
+
 class Certification(CertificationBase, ORMModeMixin):
+    pass
+
+
+class CertificationPrettyDate(Certification, PrettifyDatesMixin):
     pass
 
 
@@ -126,4 +139,12 @@ class UserProfile(UserProfileBase, ORMModeMixin):
     jobs: Optional[List[Job]] = []
     educations: Optional[List[Education]] = []
     certifications: Optional[List[Certification]] = []
+    template: Optional[Template] = None
+
+
+class UserProfilePrettyDate(UserProfileBase, ORMModeMixin):
+    skills: Optional[List[Skill]] = []
+    jobs: Optional[List[JobPrettyDate]] = []
+    educations: Optional[List[EducationPrettyDate]] = []
+    certifications: Optional[List[CertificationPrettyDate]] = []
     template: Optional[Template] = None
