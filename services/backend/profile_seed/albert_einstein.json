@@ -6,13 +6,38 @@
   "email": "albert.einstein@email.com",
   "phone": "1-234-567-8999",
   "designation": "Theoretical Pysicist",
+  "website": "https://en.wikipedia.org/wiki/Albert_Einstein",
   "skills": [
     { "name": "Physics", "learning": false },
-    { "name": "Philosophy", "learning": false }
+    { "name": "Philosophy", "learning": false },
+    { "name": "Mathematics", "learning": false },
+    { "name": "General Relativity", "learning": false },
+    { "name": "Photoelectric effect", "learning": false },
+    { "name": "Cosmological constant", "learning": false },
+    { "name": "E=MC2", "learning": false },
+    { "name": "EPR Paradox", "learning": false },
+    { "name": "Bose–Einstein statistics", "learning": false },
+    { "name": "Gravitational wave", "learning": false }
   ],
   "jobs": [
     {
       "company": "University of Oxford",
+      "designation": "Theoretical Pysicist",
+      "description": "Develop Physic theories.",
+      "startdate": "1646135710.834",
+      "current": false,
+      "enddate": "1646135730.358"
+    },
+    {
+      "company": "Swiss Patent Office",
+      "designation": "Theoretical Pysicist",
+      "description": "Develop Physic theories.",
+      "startdate": "1646135710.834",
+      "current": false,
+      "enddate": "1646135730.358"
+    },
+    {
+      "company": "Prussian Academy of Sciences",
       "designation": "Theoretical Pysicist",
       "description": "Develop Physic theories.",
       "startdate": "1646135710.834",
@@ -28,6 +53,14 @@
       "startdate": "1646135730.358",
       "current": false,
       "enddate": "1646147736.464"
+    },
+    {
+      "college": "Federal polytechnic school in Zurich",
+      "designation": "Diploma",
+      "description": "Federal Teaching Diploma",
+      "startdate": "1646135730.358",
+      "current": false,
+      "enddate": "1646147736.464"
     }
   ],
   "certifications": [
@@ -39,6 +72,24 @@
       "expiration_date": "1646147736.464",
       "credential_id": "AJLJ2-234",
       "credential_url": "https://www.nobelprize.org/"
+    },
+    {
+      "name": "Barnard Medal for Meritorious Service to Science",
+      "issuing_organization": "Columbia University",
+      "issue_date": "1646135730.358",
+      "current": false,
+      "expiration_date": "1646147736.464",
+      "credential_id": "KWERDK-499",
+      "credential_url": "https://sps.columbia.edu/"
+    },
+    {
+      "name": "Matteucci Medal",
+      "issuing_organization": "Italian Society of Sciences",
+      "issue_date": "1646135730.358",
+      "current": false,
+      "expiration_date": "1646147736.464",
+      "credential_id": "ALMWOL-4W9",
+      "credential_url": "https://www.accademiaxl.it/medaglia-matteucci/"
     }
   ]
 }

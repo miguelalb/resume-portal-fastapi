@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="renderer">
       <div v-html="content"></div>
       <div v-if="notFound">
           <h4>Profile not found.</h4>
@@ -36,3 +36,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+#renderer{
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 0 1rem;
+}
+</style>

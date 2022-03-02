@@ -1,497 +1,213 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        @page{
-        size: letter portrait;
-        margin: 0;
-        }
-
-        *{
-        box-sizing: border-box;
-        }
-
-        :root{
-        --page-width: 8.5in;
-        --page-height: 11in;
-        --main-width: 6.4in;
-        --sidebar-width: calc(var(--page-width) - var(--main-width));
-        --decorator-horizontal-margin: 0.2in;
-
-        --sidebar-horizontal-padding: 0.2in;
-
-        /* XXX: using px for very good precision control */
-        --decorator-outer-offset-top: 10px;
-        --decorator-outer-offset-left: -5.5px;
-        --decorator-border-width: 1px;
-        --decorator-outer-dim: 9px;
-        --decorator-border: 1px solid #ccc;
-
-        --row-blocks-padding-top: 5pt;
-        --date-block-width: 0.6in;
-
-        --main-blocks-title-icon-offset-left: -19pt;
-        }
-
-        body{
-        width: var(--page-width);
-        height: var(--page-height);
-        margin: 0;
-        font-family: "Open Sans", sans-serif; 
-        font-weight: 300;
-        line-height: 1.3;
-        color: #444;
-        hyphens: auto;
-        }
-
-        h1, h2, h3{
-        margin: 0;
-        color: #000;
-        }
-
-        li{
-        list-style-type: none;
-        }
-
-        #main{
-        float: left;
-        width: var(--main-width);
-        padding: 0.25in 0.25in 0 0.25in;
-        font-size: 7pt;
-        }
-
-        #sidebar{
-        float: right;
-        position: relative; /* for disclaimer */
-        width: var(--sidebar-width);
-        height: 100%;
-        padding: 0.6in var(--sidebar-horizontal-padding);
-        background-color: #f2f2f2;
-        font-size: 8.5pt;
-        }
-
-        /* main */
-
-        /** big title **/
-        #title, h1, h2{
-        text-transform: uppercase;
-        }
-
-        #title{
-        position: relative;
-        left: 0.55in;
-        margin-bottom: 0.3in;
-        line-height: 1.2;
-        }
-
-        #title h1{
-        font-weight: 300;
-        font-size: 18pt;
-        line-height: 1.5;
-        }
-
-        #title h1 strong{
-        margin: auto 2pt auto 4pt;
-        font-weight: 600;
-        }
-
-        .subtitle{
-        font-size: 8pt;
-        }
-
-        /*** categorial blocks ***/
-
-        .main-block{
-        margin-top: 0.1in;
-        }
-
-        #main h2{
-        position: relative;
-        top: var(--row-blocks-padding-top);
-        /* XXX: 0.5px for aligning fx printing */
-        left: calc((var(--date-block-width) + var(--decorator-horizontal-margin)));
-        font-weight: 400;
-        font-size: 11pt;
-        color: #555;
-        }
-
-        #main h2 > i{
-        /* use absolute position to prevent icon's width from misaligning title */
-        /* assigning a fixed width here is no better due to needing to align decorator
-            line too */
-        position: absolute;
-        left: var(--main-blocks-title-icon-offset-left);
-        z-index: 1; /* over decorator line */
-        color: #444;
-        }
-
-        #main h2::after{ /* extends the decorator line */
-        height: calc(var(--row-blocks-padding-top) * 2);
-        position: relative;
-        top: calc(-1 * var(--row-blocks-padding-top));
-        /* XXX: 0.5px for aligning fx printing */
-        left: calc(-1 * var(--decorator-horizontal-margin));
-        display: block;
-        border-left: var(--decorator-border);
-        z-index: 0;
-        line-height: 0;
-        font-size: 0;
-        content: ' ';
-        }
-
-        /**** minor tweaks on the icon fonts ****/
-        #main h2 > .fa-graduation-cap{
-        left: calc(var(--main-blocks-title-icon-offset-left) - 2pt);
-        top: 2pt;
-        }
-
-        #main h2 > .fa-suitcase{
-        top: 1pt;
-        }
-
-        #main h2 > .fa-folder-open{
-        top: 1.5pt;
-        }
-
-        /**** individual row blocks (date - decorator - details) ****/
-
-        .blocks{
-        display: flex;
-        flex-flow: row nowrap;
-        }
-
-        .blocks > div{
-        padding-top: var(--row-blocks-padding-top);
-        }
-
-        .date{
-        flex: 0 0 var(--date-block-width);
-        padding-top: calc(var(--row-blocks-padding-top) + 2.5pt) !important;
-        padding-right: var(--decorator-horizontal-margin);
-        font-size: 7pt;
-        text-align: right;
-        line-height: 1;
-        }
-
-        .date span{
-        display: block;
-        }
-
-        .date span:nth-child(2)::before{
-        position: relative;
-        top: 1pt;
-        right: 5.5pt;
-        display: block;
-        height: 10pt;
-        content: '|';
-        }
-
-        .decorator{
-        flex: 0 0 0;
-        position: relative;
-        width: 2pt;
-        min-height: 100%;
-        border-left: var(--decorator-border);
-        }
-
-        /*
-        * XXX: Use two filled circles to achieve the circle-with-white-border effect.
-        * The normal technique of only using one pseudo element and
-        * border: 1px solid white; style makes firefox erroneously either:
-        * 1) overflows the grayshade background (if no background-clip is set), or
-        * 2) shows decorator line which should've been masked by the white border
-        *
-        */
-
-        .decorator::before{
-        position: absolute;
-        top: var(--decorator-outer-offset-top);
-        left: var(--decorator-outer-offset-left);
-        content: ' ';
-        display: block;
-        width: var(--decorator-outer-dim);
-        height: var(--decorator-outer-dim);
-        border-radius: calc(var(--decorator-outer-dim) / 2);
-        background-color: #fff;
-        }
-
-        .decorator::after{
-        position: absolute;
-        top: calc(var(--decorator-outer-offset-top) + var(--decorator-border-width));
-        left: calc(var(--decorator-outer-offset-left) + var(--decorator-border-width));
-        content: ' ';
-        display: block;
-        width: calc(var(--decorator-outer-dim) - (var(--decorator-border-width) * 2));
-        height: calc(var(--decorator-outer-dim) - (var(--decorator-border-width) * 2));
-        border-radius: calc((var(--decorator-outer-dim) - (var(--decorator-border-width) * 2)) / 2);
-        background-color: #555;
-        }
-
-        .blocks:last-child .decorator{ /* slightly shortens it */
-        margin-bottom: 0.25in;
-        }
-
-        /***** fine-tunes on the details block where the real juice is *****/
-
-        .details{
-        flex: 1 0 0;
-        padding-left: var(--decorator-horizontal-margin);
-        padding-top: calc(var(--row-blocks-padding-top) - 0.5pt) !important; /* not sure why but this is needed for better alignment */
-        }
-
-        .details header{
-        color: #000;
-        }
-
-        .details h3{
-        font-size: 9pt;
-        }
-
-        .main-block:not(.concise) .details div{
-        margin: 0.18in 0 0.1in 0; 
-        }
-
-        .main-block:not(.concise) .blocks:last-child .details div{
-        margin-bottom: 0;
-        }
-
-        .main-block.concise .details div:not(.concise){
-        /* use padding to work around the fact that margin doesn't affect floated
-            neighboring elements */
-        padding: 0.05in 0 0.07in 0;
-        }
-
-        .details .place{
-        float: left;
-        font-size: 7.5pt;
-        }
-
-        .details .location{
-        float: right;
-        }
-
-        .details div{
-        clear: both;
-        }
-
-        .details .location::before{
-        display: inline-block;
-        position: relative;
-        right: 3pt;
-        top: 0.25pt;
-        font-family: FontAwesome;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: inherit;
-        content: "\f041";
-        }
-
-        /***** fine-tunes on the lists... *****/
-
-        #main ul{
-        padding-left: 0.07in;
-        margin: 0.08in 0;
-        }
-
-        #main li{
-        margin: 0 0 0.025in 0;
-        }
-
-        /****** customize list symbol style ******/
-        #main li::before{
-        position: relative;
-        margin-left: -4.25pt;
-        content: '• ';
-        }
-
-        .details .concise ul{
-        margin: 0 !important;
-        -webkit-columns: 2;
-        -moz-columns: 2;
-        columns: 2;
-        }
-
-        .details .concise li{
-        margin: 0 !important;
-        }
-
-        .details .concise li{
-        margin-left: 0 !important;
-        }
-
-
-
-        /* sidebar */
-
-        #sidebar h1{
-        font-weight: 400;
-        font-size: 11pt;
-        }
-
-        .side-block{
-        margin-top: 0.5in; 
-        }
-
-        #contact ul{
-        margin-top: 0.05in;
-        padding-left: 0;
-        font-family: "Source Code Pro";
-        font-weight: 400;
-        line-height: 1.75;
-        }
-
-        #contact li > i{
-        width: 9pt; /* for text alignment */
-        text-align: right;
-        }
-
-        #skills{
-        line-height: 1.5;
-        }
-
-        #skills ul{
-        margin: 0.05in 0 0.15in;
-        padding: 0;
-        }
-
-        #disclaimer{
-        position: absolute;
-        bottom: var(--sidebar-horizontal-padding);
-        right: var(--sidebar-horizontal-padding);
-        font-size: 7.5pt;
-        font-style: italic;
-        line-height: 1.1;
-        text-align: right;
-        color: #777;
-        }
-
-        #disclaimer code{
-        color: #666;
-        font-family: "Source Code Pro";
-        font-weight: 400;
-        font-style: normal;
-        }
-    </style>
-  </head>
-  <body lang="en">
-    <section id="main">
-      <header id="title">
-        <h1>{{first_name}} {{last_name}}</h1>
-        <span class="subtitle">{{designation}}</span>
-      </header>
-      <section class="main-block">
-        <h2>
-          <i class="fa fa-suitcase"></i> Experiences
-        </h2>
-        {% for job in jobs%}
-        <section class="blocks">
-            <div class="date">
-                {% if job.current == True %}
-                <span>{{job.startdate}}</span><span>present</span>
-                {% else %}
-                <span>{{job.startdate}}</span><span>{{job.enddate}}</span>
-                {% endif %}
-            </div>
-            <div class="decorator">
-            </div>
-            <div class="details">
-                <header>
-                    <h3>{{job.designation}}</h3>
-                    <span class="place">{{job.company}}</span>
-                </header>
-                <div>
-                    <ul>
-                        <li>{{job.description}}</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        {% endfor %}
-        <section class="main-block concise">
-            <h2>
-                <i class="fa fa-graduation-cap"></i> Education
-            </h2>
-            {% for education in educations %}
-                <section class="blocks">
-                    <div class="date">
-                        {% if education.current == True %}
-                        <span>{{education.startdate}}</span><span>present</span>
-                        {% else %}
-                        <span>{{education.startdate}}</span><span>{{education.enddate}}</span>
-                        {% endif %}
-                    </div>
-                    <div class="decorator">
-                    </div>
-                    <div class="details">
-                        <header>
-                            <h3>{{education.designation}}</h3>
-                            <span class="place">{{education.college}}</span>
-                        </header>
-                        <div>{{education.description}}</div>
-                    </div>
-                </section>
-            </section>
-            {% endfor %}
-        </section>
-        <section class="main-block concise">
-            <h2>
-                <i class="fas fa-certificate"></i> Certifications
-            </h2>
-            {% for certification in certifications %}
-            <section class="blocks">
-                <div class="date">
-                    {% if certification.current == True %}
-                    <span>{{certification.issue_date}}</span><span>Does not expire</span>
-                    {% else %}
-                    <span>{{certification.issue_date}}</span><span>{{certification.expiration_date}}</span>
-                    {% endif %}
-                </div>
-                <div class="decorator"></div>
-                <div class="details">
-                    <header>
-                        <h3>{{certification.name}}</h3>
-                        <span class="place">{{certification.issuing_organization}}</span>
-                    </header>
-                    {% if certification.credential_id != None %}
-                    <div>Credential ID: {{certification.credential_id}}</div>
-                    {% endif %}
-                    {% if certification.credential_url != None %}
-                    <div>Credential URL: <a href="{{certification.credential_url}}" target="_blank" rel="noopener noreferrer"></a></div>
-                    {% endif %}
-                </div>
-            </section>
-            {% endfor %}
-      </section>
-    </section>
-    <aside id="sidebar">
-      <div class="side-block" id="contact">
-        <h1>
-          Contact Info
-        </h1>
-        <ul>
-          <li><i class="fa fa-envelope"></i> {{email}}</li>
-          <li><i class="fa fa-phone"></i> {{phone}}</li>
-        </ul>
-      </div>
-      <div class="side-block" id="skills">
-        <h1>
-          Skills
-        </h1>
-        <ul>
-          {% for skill in skills %}
-          <li>{{skill.name}}</li>
-          {% if skill.learning == True %}
-          <span>(learning)</span>
-          {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="side-block" id="disclaimer">
-        This r&eacute;sum&eacute; was wholly typeset with HTML/CSS &mdash; see <code>git.io/vVSYL</code>
-      </div>
-    </aside>
-  </body>
+<head>
+
+	<title>{{first_name}} {{last_name}} | {{designation}} | {{email}}</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" media="all" /> 
+	<style>
+			/*
+	---------------------------------------------------------------------------------
+		STRIPPED DOWN RESUME TEMPLATE
+		html resume
+
+		v0.9: 5/28/09
+
+		design and code by: thingsthatarebrown.com 
+							(matt brown)
+	---------------------------------------------------------------------------------
+	*/
+
+
+	.msg { padding: 10px; background: #222; position: relative; }
+	.msg h1 { color: #fff;  }
+	.msg a { margin-left: 20px; background: #408814; color: white; padding: 4px 8px; text-decoration: none; }
+	.msg a:hover { background: #266400; }
+
+	/* //-- yui-grids style overrides -- */
+	body { font-family: Georgia; color: #444; }
+	#inner { padding: 10px 80px; margin: 80px auto; background: #f5f5f5; border: solid #666; border-width: 8px 0 2px 0; }
+	.yui-gf { margin-bottom: 2em; padding-bottom: 2em; border-bottom: 1px solid #ccc; }
+
+	/* //-- header, body, footer -- */
+	#hd { margin: 2.5em 0 3em 0; padding-bottom: 1.5em; border-bottom: 1px solid #ccc }
+	#hd h2 { text-transform: uppercase; letter-spacing: 2px; }
+	#bd, #ft { margin-bottom: 2em; }
+
+	/* //-- footer -- */
+	#ft { padding: 1em 0 5em 0; font-size: 92%; border-top: 1px solid #ccc; text-align: center; }
+	#ft p { margin-bottom: 0; text-align: center;   }
+
+	/* //-- core typography and style -- */
+	#hd h1 { font-size: 48px; text-transform: uppercase; letter-spacing: 3px; }
+	h2 { font-size: 152% }
+	h3, h4 { font-size: 122%; }
+	h1, h2, h3, h4 { color: #333; }
+	p { font-size: 100%; line-height: 18px; padding-right: 3em; }
+	a { color: #990003 }
+	a:hover { text-decoration: none; }
+	strong { font-weight: bold; }
+	li { line-height: 24px; border-bottom: 1px solid #ccc; }
+	p.enlarge { font-size: 144%; padding-right: 6.5em; line-height: 24px; }
+	p.enlarge span { color: #000 }
+	.contact-info { margin-top: 7px; }
+	.first h2 { font-style: italic; }
+	.last { border-bottom: 0 }
+
+
+	/* //-- section styles -- */
+
+	a#pdf { display: block; float: left; background: #666; color: white; padding: 6px 50px 6px 12px; margin-bottom: 6px; text-decoration: none;  }
+	a#pdf:hover { background: #222; }
+
+	.job, .education { position: relative; margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #ccc; }
+	.job h4, .education h4 { position: absolute; top: 0.35em; right: 0 }
+	.job p, .education p { margin: 0.75em 0 3em 0; }
+
+	.last { border: none; }
+	.skills-list {  }
+	.skills-list ul { margin: 0; }
+	.skills-list li { margin: 3px 0; padding: 3px 0; }
+	.skills-list li span { font-size: 152%; display: block; margin-bottom: -2px; padding: 0 }
+	.talent { width: 32%; float: left }
+	.talent h2 { margin-bottom: 6px; }
+
+	#srt-ttab { margin-bottom: 100px; text-align: center;  }
+	#srt-ttab img.last { margin-top: 20px }
+
+	/* --// override to force 1/8th width grids -- */
+	.yui-gf .yui-u{width:80.2%;}
+	.yui-gf div.first{width:12.3%;}
+	</style>
+</head>
+<body>
+
+<div id="doc2" class="yui-t7">
+	<div id="inner">
+	
+		<div id="hd">
+			<div class="yui-gc">
+				<div class="yui-u first">
+					<h1>{{first_name}} {{last_name}}</h1>
+					<h2>{{designation}}</h2>
+				</div>
+
+				<div class="yui-u">
+					<div class="contact-info">
+						<h3><a href="mailto:{{email}}">{{email}}</a></h3>
+						<h3>{{phone}}</h3>
+					</div><!--// .contact-info -->
+				</div>
+			</div><!--// .yui-gc -->
+		</div><!--// hd -->
+
+		<div id="bd">
+			<div id="yui-main">
+				<div class="yui-b">
+
+					<div class="yui-gf">
+						<div class="yui-u first">
+							<h2>Profile</h2>
+						</div>
+						<div class="yui-u">
+							<p class="enlarge">
+								{{summary}} 
+							</p>
+						</div>
+					</div><!--// .yui-gf -->
+
+					<div class="yui-gf">
+						<div class="yui-u first">
+							<h2>Skills</h2>
+						</div>
+						<div class="yui-u">
+							{% for skill in skills%}
+							<div class="talent">
+								<h2>{{skill.name}}</h2>
+							</div>
+							{% endfor %}
+						</div>
+					</div><!--// .yui-gf -->
+
+					<div class="yui-gf">
+	
+						<div class="yui-u first">
+							<h2>Experience</h2>
+						</div><!--// .yui-u -->
+
+						<div class="yui-u">
+							{% for job in jobs %}
+							<div class="job">
+								<h2>{{job.company}}</h2>
+								<h3>{{job.designation}}</h3>
+								{% if job.current == True %}
+								<h4>{{job.startdate}} - Present</h4>
+								{% else %}
+								<h4>{{job.startdate}} - {{job.enddate}}</h4>
+								{% endif %}
+								<p>{{job.description}}</p>
+							</div>
+							{% endfor %}
+						</div><!--// .yui-u -->
+					</div><!--// .yui-gf -->
+					
+					
+					<div class="yui-gf">
+						<div class="yui-u first">
+							<h2>Certification</h2>
+						</div>
+						{% for certification in certifications %}
+						<div class="yui-u education">
+							<h2>{{certification.name}}</h2>
+							<h3>{{certification.issuing_organization}}</h3>
+							{% if certification.current == True %}
+							<h4>{{certification.issue_date}} - Present</h4>
+							{% else %}
+							<h4>{{certification.issue_date}} - {{certification.expiration_date}}</h4>
+							{% endif %}
+							<p>Credential ID: {{certification.credential_id}}</p>
+							<a href="{{certification.credential_url}}" target="_blank" rel="noopener noreferrer">See Credential</a>
+						</div>
+						{% endfor %}
+					</div><!--// .yui-gf -->
+					
+					<div class="yui-gf last">
+						<div class="yui-u first">
+							<h2>Education</h2>
+						</div>
+						{% for education in educations %}
+						<div class="yui-u education">
+							<h2>{{education.college}}</h2>
+							<h3>{{education.designation}}</h3>
+							{% if education.current == True %}
+							<h4>{{education.startdate}} - Present</h4>
+							{% else %}
+							<h4>{{education.startdate}} - {{education.enddate}}</h4>
+							{% endif %}
+							<p>{{education.description}}</p>
+						</div>
+						{% endfor %}
+					</div><!--// .yui-gf -->
+
+
+				</div><!--// .yui-b -->
+			</div><!--// yui-main -->
+		</div><!--// bd -->
+
+		<div id="ft">
+			<p>{{firs_name}} {{last_name}} &mdash; <a href="mailto:{{email}}">{{email}}</a> &mdash; {{phone}}</p>
+		</div><!--// footer -->
+
+	</div><!-- // inner -->
+
+
+</div><!--// doc -->
+
+
+</body>
 </html>
+
