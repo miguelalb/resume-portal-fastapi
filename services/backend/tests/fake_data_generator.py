@@ -4,8 +4,9 @@ from datetime import datetime
 
 from faker import Faker
 
-fake = Faker()
 #TODO Move on to Faker
+fake = Faker()
+
 
 def get_sample_template():
     name = "Sample" + str(random.randint(0, sys.maxsize))
@@ -16,16 +17,16 @@ def get_sample_template():
 
 def get_sample_skill():
     return {
-        "name": "SampleSkill" + str(random.randint(0, sys.maxsize)),
+        "name": random.choice(["Python", "Go", "Kubernetes", "Java", "Javascript", "Docker", "AWS", "GCP", "Azure", "Machine learning"]),
         "learning": random.choice([True, False]),
     }
 
 
 def get_sample_job():
     return {
-        "company": "SampleCompany" + str(random.randint(0, sys.maxsize)),
-        "designation": "SampleDesignation" + str(random.randint(0, sys.maxsize)),
-        "description": "SampleDescription" + str(random.randint(0, sys.maxsize)),
+        "company": fake.company(),
+        "designation": fake.job(),
+        "description": fake.catch_phrase(),
         "startdate": str(datetime.now().timestamp()),
         "current": random.choice([True, False]),
         "enddate": str(datetime.now().timestamp()),
@@ -34,7 +35,7 @@ def get_sample_job():
 
 def get_sample_education():
     return {
-        "college": "SampleCollege" + str(random.randint(0, sys.maxsize)),
+        "college": fake.company(),
         "designation": "SampleDesignation" + str(random.randint(0, sys.maxsize)),
         "description": "SampleDescription" + str(random.randint(0, sys.maxsize)),
         "startdate": str(datetime.now().timestamp()),
@@ -57,13 +58,14 @@ def get_sample_certification():
 
 def get_sample_profile():
     return {
-        "first_name": "SampleFirst" + str(random.randint(0, sys.maxsize)),
-        "last_name": "SampleLast" + str(random.randint(0, sys.maxsize)),
-        "public_name": "SamplePublic" + str(random.randint(0, sys.maxsize)),
-        "summary": "SampleSummary" + str(random.randint(0, sys.maxsize)),
-        "email": str(random.randint(0, sys.maxsize)) + "@email.com",
-        "phone": str(random.randint(0, sys.maxsize)),
-        "designation": "SampleDesignation" + str(random.randint(0, sys.maxsize)),
+        "first_name": fake.first_name(),
+        "last_name": fake.last_name(),
+        "public_name": fake.color_name().lower() + fake.last_name().lower(),
+        "summary": fake.paragraph(nb_sentences=6),
+        "email": fake.ascii_email(),
+        "phone": fake.phone_number(),
+        "designation": fake.job(),
+        "website": "https://www."+fake.domain_name(),
         "skills": [get_sample_skill() for i in range(5)],
         "jobs": [get_sample_job() for i in range(5)],
         "educations": [get_sample_education() for i in range(5)],

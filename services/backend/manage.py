@@ -83,6 +83,7 @@ def seed_database():
     add_fake_users_profiles()
     click.echo(click.style("Fake profile created!", fg="green", bold=True))
 
+#TODO Add migration API to encapsulate alembic - i.e.: add migration/apply migration 
 
 if __name__ == "__main__":
     cli()

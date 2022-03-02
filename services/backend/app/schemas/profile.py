@@ -16,6 +16,7 @@ class UserProfileBase(BaseModel):
     email: str
     phone: str
     designation: str
+    website: str
 
 
 class SkillBase(BaseModel):

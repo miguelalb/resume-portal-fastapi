@@ -55,7 +55,7 @@ class Template(Base, BaseMixin, TimestampMixin):
     def __str__(self):
         return f"<Template: {self.name}>"
 
-#TODO Add Portfolio, Website and Social medias - Linkedin etc to userprofile
+#TODO Add Portfolio, and Social medias - Linkedin etc to userprofile
 class UserProfile(Base, BaseMixin, TimestampMixin):
     first_name = Column(String)
     last_name = Column(String)
@@ -64,6 +64,7 @@ class UserProfile(Base, BaseMixin, TimestampMixin):
     email = Column(String)
     phone = Column(String)
     designation = Column(String)
+    website = Column(String, nullable=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("user.id"))
     template_id = Column(UUID(as_uuid=True), ForeignKey("template.id"))
 

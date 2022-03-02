@@ -54,6 +54,7 @@ def create_user_profile(
         email=profile_in.email,
         phone=profile_in.phone,
         designation=profile_in.designation,
+        website=profile_in.website
     )
     db.add(user_profile_object)
     user_profile_object.user_id = user_id
@@ -134,6 +135,7 @@ def update_user_profile(
     profile_inDB.email = profile_in.email
     profile_inDB.phone = profile_in.phone
     profile_inDB.designation = profile_in.designation
+    profile_inDB.website = profile_in.website
     profile_inDB.template_id = profile_in.template_id
 
     # Update, Create new and Delete removed
