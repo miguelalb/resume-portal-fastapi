@@ -17,7 +17,14 @@ export default {
     pingBackend() {
         return axios.get(`${apiUrl}/ping`)
     },
+    userLogin(username, password) {
+        // TODO Make this more secure both front and backend
+        return axios.post(`${apiUrl}/auth/login?username=${username}&password=${password}`)
+    },
     getProfileByPublicName(publicName) {
         return axios.get(`${apiUrl}/profile/${publicName}`)
+    },
+    getAllTemplates() {
+        return axios.get(`${apiUrl}/template`)
     }
 }
