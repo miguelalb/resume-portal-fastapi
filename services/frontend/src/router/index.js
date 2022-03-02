@@ -23,6 +23,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/ProfileView.vue')
   },
+  // TODO Login, Edit own profile, Create Templates with HTML editor [optional]
 ]
 
 const router = createRouter({

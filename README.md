@@ -2,8 +2,8 @@
 
 _**Note**: Work in progress:_
 
-- _Backend API - 90% completed_
-- _Frontend - 10% completed_
+- _Backend API - 96% completed_
+- _Frontend - 25% completed_
 
 The Resume Maker Portal App is an Open Source tool that helps you create a modern :fire: and professional resume!
 
