@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import api from "@/api.js"
+import ping from "@/api/ping.js";
+
 export default {
     name: "ping",
     data() {
@@ -16,7 +17,7 @@ export default {
         }
     },
     mounted() {
-        api.pingBackend()
+        ping.pingBackend()
             .then(res => {
                 this.pong = res.data.ping;
                 this.environment = res.data.environment;

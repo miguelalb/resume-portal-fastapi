@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import api from "@/api.js"
+import profile from "@/api/profile"
 import services from "@/services.js"
 
 export default {
@@ -21,7 +21,7 @@ export default {
         }
     },
     mounted() {
-        api.getProfileByPublicName(this.$route.params.public_name)
+        profile.getProfileByPublicName(this.$route.params.public_name)
             .then(res => {
                 this.notFound = false;
                 const content = res.data.content;

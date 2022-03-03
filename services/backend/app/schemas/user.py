@@ -12,6 +12,9 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserLogin(UserCreate):
+    pass
+
 # properties on Update
 class UserUpdate(UserCreate):
     pass
