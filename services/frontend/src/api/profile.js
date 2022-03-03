@@ -1,8 +1,8 @@
 import axios from "axios";
-import base from './base';
+import { apiUrl } from './base';
 
-export default {
+export const apiProfile = {
     getProfileByPublicName(publicName) {
-        return axios.get(`${base.apiUrl}/profile/${publicName}`)
+        return axios.get(`${apiUrl}/profile/${publicName}`)
     },
 }

@@ -1,19 +1,19 @@
 import axios from "axios";
-import base from './base';
+import { apiUrl } from './base';
 
-export default {
-    logIn(username, password) {
-        data = {
+export const apiAuth = {
+    async logIn(username, password) {
+        const data = {
             username: username,
             password: password
         }
-        return axios.post(`${base.apiUrl}/auth/login`, data)
+        return axios.post(`${apiUrl}/auth/login`, data)
     },
-    register(username, password) {
-        data = {
+    async register(username, password) {
+        const data = {
             username: username,
             password: password
         }
-        return axios.post(`${base.apiUrl}/auth/register`, data)
+        return axios.post(`${apiUrl}/auth/register`, data)
     }
 }

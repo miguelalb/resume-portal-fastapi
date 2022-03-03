@@ -1,8 +1,8 @@
 import axios from "axios";
-import base from './base';
+import { apiUrl } from './base';
 
-export default {
+export const apiPing = {
     pingBackend() {
-        return axios.get(`${base.apiUrl}/ping`)
+        return axios.get(`${apiUrl}/ping`)
     }
 }
