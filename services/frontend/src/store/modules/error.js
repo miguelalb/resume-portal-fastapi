@@ -1,7 +1,10 @@
 
 const state = () => ({
     error: false,
-    errorMessage: ''
+    errorMessage: {
+        title: 'title',
+        content: 'content'
+    }
 })
 
 const actions = {
@@ -16,11 +19,13 @@ const actions = {
 const mutations = {
     setError(state, message) {
         state.error = true;
-        state.errorMessage = message;
+        state.errorMessage.title = message.title;
+        state.errorMessage.content = message.content
     },
     clearError(state) {
         state.error = false;
-        state.message = '';
+        state.message.title = '';
+        state.message.content = '';
     }
 }
 

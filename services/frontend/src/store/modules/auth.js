@@ -16,6 +16,12 @@ const actions = {
             }
         } catch (err) {
             console.log(err);
+            if (err.response.status === 403 || err.response.status === 401) {
+                context.commit('error/setError', {
+                    title: 'Invalid Credentials',
+                    content: err.response.data.detail
+                });
+            }
             context.commit('clearLogin');
         }
     },

@@ -11,16 +11,20 @@
             <Password id="password" v-model="userIn.password" toggleMask/>
         </template>
         <template #footer>
-            <Button icon="pi pi-check" label="Submit" @click="loginUser"/>
+            <submit-button @clicked-submit="loginUser">Submit</submit-button>
         </template>
     </Card>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import SubmitButton from "@/components/utils/SubmitButton.vue"
 
 export default {
     name: 'LoginForm',
+    components: {
+        SubmitButton
+    },
     data() {
         return {
             userIn: {
@@ -42,7 +46,6 @@ export default {
 
 <style scoped>
 .p-card {
-    /* margin: 3rem auto; */
     width: 50%;
 }
 
