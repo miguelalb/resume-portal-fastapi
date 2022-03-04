@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home text-center">
     <Navbar />
     <h3>Home View</h3>
     <Ping />
@@ -19,3 +19,5 @@ export default {
   }
 }
 </script>
+<style scoped>
+</style>

@@ -1,7 +1,6 @@
 <template>
-  <nav>
+  <nav class="text-center">
     <router-link :to="{'name': 'home'}">Home</router-link> |
-    <router-link :to="{'name': 'about'}">About</router-link> |
     <router-link :to="{'name': 'editprofile'}"> Edit my Profile</router-link> |
     <router-link to="/profile/alberteinstein">Sample Resume</router-link> |
     <router-link :to="{'name': 'login'}">Log In</router-link>

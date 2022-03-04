@@ -1,13 +1,19 @@
 <template>
-  <div>
-      <h4>Username: </h4>
-      <input type="text" v-model="userIn.username" placeholder="username">
-      <h4>Password: </h4>
-      <input type="password" v-model="userIn.password" placeholder="password" >
-      <br>
-      <br>
-      <button @click="loginUser">Submit</button>
-  </div>
+    <Card class="mx-auto">
+        <template #title>
+            Log In
+        </template>
+        <template class="text-center" #content>
+            <label for="username">Username</label>
+            <InputText id="username" type="text" v-model="userIn.username" />
+            
+            <label for="password">Password</label>
+            <Password id="password" v-model="userIn.password" toggleMask/>
+        </template>
+        <template #footer>
+            <Button icon="pi pi-check" label="Submit" @click="loginUser"/>
+        </template>
+    </Card>
 </template>
 
 <script>
@@ -34,6 +40,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.p-card {
+    /* margin: 3rem auto; */
+    width: 50%;
+}
 
+.p-card-content label {
+    display: block;
+    margin: 1em;
+}
 </style>

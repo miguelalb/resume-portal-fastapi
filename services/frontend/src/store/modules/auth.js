@@ -14,7 +14,6 @@ const actions = {
                 localStorage.setItem('token', response.data.access_token);
                 context.commit('setLogin');
             }
-            
         } catch (err) {
             console.log(err);
             context.commit('clearLogin');

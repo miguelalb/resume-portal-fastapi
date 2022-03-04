@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import EditProfileForm from "@/components/EditProfileForm.vue"
+import EditProfileForm from "@/components/profile/EditProfileForm.vue"
 import Navbar from "@/components/Navbar.vue"
 
 export default {

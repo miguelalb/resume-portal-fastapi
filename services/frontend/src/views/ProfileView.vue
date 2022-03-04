@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import RenderProfile from "@/components/RenderProfile.vue"
+import RenderProfile from "@/components/profile/RenderProfile.vue"
 import Goback from "@/components/GoBack.vue"
 
 export default {
