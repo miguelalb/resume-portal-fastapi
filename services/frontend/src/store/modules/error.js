@@ -2,12 +2,13 @@
 const state = () => ({
     error: false,
     errorMessage: {
-        title: 'title',
-        content: 'content'
+        title: 'Default Title',
+        content: 'Default content'
     }
 })
 
 const actions = {
+    // TODO YAGNI?? Error handling is inside store
     postError(context, errorMessage) {
         context.commit('setError', errorMessage);
     },

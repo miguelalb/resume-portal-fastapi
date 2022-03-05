@@ -15,14 +15,16 @@ const actions = {
                 context.commit('setLogin');
             }
         } catch (err) {
-            console.log(err);
+            localStorage.removeItem('token');
+            context.commit('clearLogin');
             if (err.response.status === 403 || err.response.status === 401) {
                 context.commit('error/setError', {
                     title: 'Invalid Credentials',
                     content: err.response.data.detail
-                });
+                }, {root: true});
+            } else {
+                console.log(err);
             }
-            context.commit('clearLogin');
         }
     },
     logout(context) {
@@ -34,8 +36,10 @@ const actions = {
             const response = await apiAuth.register(user.username, user.password);
             context.dispatch('error/clearError');
         } catch (err) {
-            console.log(err);
-            context.dispatch('error/setError', err);
+            context.commit('error/setError', {
+                title: 'Something went wrong!',
+                content: err.response.data.detail
+            }, {root: true});
         }
     }
 }

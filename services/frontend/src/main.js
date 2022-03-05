@@ -10,6 +10,7 @@ import 'primevue/resources/themes/lara-light-blue/theme.css';
 import Tooltip from 'primevue/tooltip';
 import { createApp } from 'vue';
 import App from './App.vue';
+import AlertBox from './components/error/AlertBox.vue';
 import './index.css';
 import router from './router';
 import store from './store';
@@ -26,6 +27,7 @@ app.component('Card', Card);
 app.component('Dropdown', Dropdown);
 app.component('InputText', InputText);
 app.component('Password', Password);
+app.component('AlertBox', AlertBox);
 app.directive('tooltip', Tooltip);
 
 app.mount('#app');

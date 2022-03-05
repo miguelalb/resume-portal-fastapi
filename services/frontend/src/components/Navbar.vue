@@ -3,7 +3,8 @@
     <router-link :to="{'name': 'home'}">Home</router-link> |
     <router-link :to="{'name': 'editprofile'}"> Edit my Profile</router-link> |
     <router-link to="/profile/alberteinstein">Sample Resume</router-link> |
-    <router-link :to="{'name': 'login'}">Log In</router-link>
+    <router-link :to="{'name': 'login'}">Log In</router-link> |
+    <router-link :to="{'name': 'register'}">Register</router-link>
   </nav>
 </template>
 

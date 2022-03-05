@@ -1,17 +1,24 @@
 <template>
-    <Card class="mx-auto">
+    <Card class="mx-auto md:w-1/3 sm:w-1/2 text-center p-fluid">
         <template #title>
             Log In
         </template>
         <template class="text-center" #content>
             <label for="username">Username</label>
-            <InputText id="username" type="text" v-model="userIn.username" />
+            <span class="p-input-icon-left">
+                <i class="pi pi-user" />
+                <InputText id="username" type="text" v-model="userIn.username" />
+            </span>
             
             <label for="password">Password</label>
             <Password id="password" v-model="userIn.password" toggleMask/>
+            <div class="flex justify-center mt-1">
+                <span class="text-sm" >Don't have an account with us? </span>
+                <router-link :to="{'name': 'register'}" class="text-purple-600 text-sm font-semibold mx-1">Register</router-link>
+            </div>
         </template>
         <template #footer>
-            <submit-button @clicked-submit="loginUser">Submit</submit-button>
+            <submit-button @clicked-submit="login(userIn)">Submit</submit-button>
         </template>
     </Card>
 </template>
@@ -36,18 +43,12 @@ export default {
     methods: {
         ...mapActions({
             login: 'auth/login'
-        }),
-        loginUser() {
-            this.login(this.userIn);
-        }
+        })
     }
 }
 </script>
 
 <style scoped>
-.p-card {
-    width: 50%;
-}
 
 .p-card-content label {
     display: block;
