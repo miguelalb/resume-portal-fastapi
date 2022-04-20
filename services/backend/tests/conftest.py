@@ -61,9 +61,9 @@ def superuser():
 @pytest.fixture(scope="module")
 def access_token(superuser, test_app):
     response = test_app.post(
-        f"/auth/login?username={superuser.username}&password={superuser.password}",
+        f"/auth/login",
         headers={"accept": "application/json"},
-        data="",
+        json={"username": superuser.username, "password": superuser.password},
     )
     tokens = response.json()
     logging.info("Getting access token")
