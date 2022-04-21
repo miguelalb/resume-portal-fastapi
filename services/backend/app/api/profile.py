@@ -4,7 +4,7 @@ from app import crud, schemas
 from app.dependencies import get_db, get_user
 from app.exceptions import Exc
 from app.security import decode_access_token
-from app.utils import render_template
+from app.utils import fill_html_template
 from fastapi import APIRouter, Depends, Header, status
 from sqlalchemy.orm import Session
 
@@ -24,10 +24,10 @@ async def get_profile_by_public_name(public_name: str, db: Session = Depends(get
     user_profile = crud.get_user_profile_by_public_name(db, public_name)
     if user_profile is None:
         raise Exc.ObjectNotFoundException("User Profile")
-    
+
     template = crud.get_template_by_id(db, user_profile.template_id)
-    profile_obj = schemas.UserProfilePrettyDate.from_orm(user_profile)
-    content = render_template(template.content, profile_obj.dict())
+    user_profile_obj = schemas.UserProfilePrettyDate.from_orm(user_profile)
+    content = fill_html_template(template.content, user_profile_obj.dict())
     return schemas.UserProfileRender(content=content)
 
 
