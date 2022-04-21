@@ -1,9 +1,11 @@
 import base64
 from datetime import datetime
+from functools import lru_cache
 
 from jinja2 import BaseLoader, Environment
 
 
+@lru_cache(maxsize=10)
 def fill_html_template(template_content: str, profile_data: dict) -> str:
     """
     Fills an HTML template with profile data and base64 encode it.
